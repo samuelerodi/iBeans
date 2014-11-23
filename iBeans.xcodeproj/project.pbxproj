@@ -14,6 +14,8 @@
 		B948D7091A22A993002EB9D5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B948D7081A22A993002EB9D5 /* Images.xcassets */; };
 		B948D70C1A22A993002EB9D5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B948D70A1A22A993002EB9D5 /* LaunchScreen.xib */; };
 		B948D7181A22A993002EB9D5 /* iBeansTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B948D7171A22A993002EB9D5 /* iBeansTests.m */; };
+		B948D7221A22AA27002EB9D5 /* Container.m in Sources */ = {isa = PBXBuildFile; fileRef = B948D7211A22AA27002EB9D5 /* Container.m */; };
+		B948D7231A22AA27002EB9D5 /* Container.m in Sources */ = {isa = PBXBuildFile; fileRef = B948D7211A22AA27002EB9D5 /* Container.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,7 @@
 		B948D7111A22A993002EB9D5 /* iBeansTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iBeansTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B948D7161A22A993002EB9D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B948D7171A22A993002EB9D5 /* iBeansTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iBeansTests.m; sourceTree = "<group>"; };
+		B948D7211A22AA27002EB9D5 /* Container.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Container.m; path = ../Container.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +84,7 @@
 		B948D6FA1A22A993002EB9D5 /* iBeans */ = {
 			isa = PBXGroup;
 			children = (
+				B948D7211A22AA27002EB9D5 /* Container.m */,
 				B948D6FF1A22A993002EB9D5 /* AppDelegate.h */,
 				B948D7001A22A993002EB9D5 /* AppDelegate.m */,
 				B948D7021A22A993002EB9D5 /* ViewController.h */,
@@ -220,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B948D7041A22A993002EB9D5 /* ViewController.m in Sources */,
+				B948D7221A22AA27002EB9D5 /* Container.m in Sources */,
 				B948D7011A22A993002EB9D5 /* AppDelegate.m in Sources */,
 				B948D6FE1A22A993002EB9D5 /* main.m in Sources */,
 			);
@@ -230,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B948D7181A22A993002EB9D5 /* iBeansTests.m in Sources */,
+				B948D7231A22AA27002EB9D5 /* Container.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
