@@ -21,6 +21,10 @@
     self.numOfSeeds=self.numOfSeeds + seeds;
 };
 
+@end
+
+@implementation Bowl
+
 - (int) empty {
     int nSeeds;
     nSeeds=self.numOfSeeds;
@@ -31,15 +35,21 @@
 - (id) initWithPosition: (int) pos	{
     if (self =[super init])
     {   [self setPosition: (pos)];
-        
-        if (pos==TRAY_NUM) {
-            [self setNumOfSeeds: 0];
-        }
-        else
-            [self setNumOfSeeds: (NUM_SEEDS)];
-
+        [self setNumOfSeeds: (NUM_SEEDS)];
         return self;}
     else return nil;
 };
-
 @end
+
+@implementation Tray
+
+- (id) initWithPosition: (int) pos	{
+    if (self =[super init])
+    {   [self setPosition: (pos)];
+        [self setNumOfSeeds: 0];
+        return self;}
+    else return nil;
+};
+@end
+
+
