@@ -9,5 +9,9 @@
 #import <Foundation/Foundation.h>
 
 @interface Player : NSObject
+@property (nonatomic) NSString* name;
+
+- (void) initWithBowls;
+
 
 @end

@@ -14,8 +14,8 @@
 		B948D7091A22A993002EB9D5 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B948D7081A22A993002EB9D5 /* Images.xcassets */; };
 		B948D70C1A22A993002EB9D5 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B948D70A1A22A993002EB9D5 /* LaunchScreen.xib */; };
 		B948D7181A22A993002EB9D5 /* iBeansTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B948D7171A22A993002EB9D5 /* iBeansTests.m */; };
-		B948D7281A22AC32002EB9D5 /* Container.m in Sources */ = {isa = PBXBuildFile; fileRef = B948D7271A22AC32002EB9D5 /* Container.m */; };
 		B948D72B1A22AC87002EB9D5 /* Player.m in Sources */ = {isa = PBXBuildFile; fileRef = B948D72A1A22AC87002EB9D5 /* Player.m */; };
+		B948D72F1A22AD4B002EB9D5 /* Container.m in Sources */ = {isa = PBXBuildFile; fileRef = B948D72E1A22AD4B002EB9D5 /* Container.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,10 +42,10 @@
 		B948D7111A22A993002EB9D5 /* iBeansTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iBeansTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B948D7161A22A993002EB9D5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B948D7171A22A993002EB9D5 /* iBeansTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = iBeansTests.m; sourceTree = "<group>"; };
-		B948D7261A22AC32002EB9D5 /* Container.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Container.h; path = ../Container.h; sourceTree = "<group>"; };
-		B948D7271A22AC32002EB9D5 /* Container.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Container.m; path = ../Container.m; sourceTree = "<group>"; };
 		B948D7291A22AC87002EB9D5 /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		B948D72A1A22AC87002EB9D5 /* Player.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Player.m; sourceTree = "<group>"; };
+		B948D72D1A22AD4B002EB9D5 /* Container.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Container.h; sourceTree = "<group>"; };
+		B948D72E1A22AD4B002EB9D5 /* Container.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Container.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,8 +129,8 @@
 		B948D72C1A22AC97002EB9D5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				B948D7261A22AC32002EB9D5 /* Container.h */,
-				B948D7271A22AC32002EB9D5 /* Container.m */,
+				B948D72D1A22AD4B002EB9D5 /* Container.h */,
+				B948D72E1A22AD4B002EB9D5 /* Container.m */,
 				B948D7291A22AC87002EB9D5 /* Player.h */,
 				B948D72A1A22AC87002EB9D5 /* Player.m */,
 			);
@@ -237,8 +237,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B948D72F1A22AD4B002EB9D5 /* Container.m in Sources */,
 				B948D7041A22A993002EB9D5 /* ViewController.m in Sources */,
-				B948D7281A22AC32002EB9D5 /* Container.m in Sources */,
 				B948D7011A22A993002EB9D5 /* AppDelegate.m in Sources */,
 				B948D6FE1A22A993002EB9D5 /* main.m in Sources */,
 				B948D72B1A22AC87002EB9D5 /* Player.m in Sources */,

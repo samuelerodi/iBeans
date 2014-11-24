@@ -10,4 +10,12 @@
 
 @interface Container : NSObject
 
+@property (nonatomic) int numOfSeeds;
+@property (nonatomic) int position;
+
+- (void) increment;
+- (void) addSeeds: (int) seeds;
+- (int) empty;
+- (id) initWithPosition: (int) pos;
+
 @end
