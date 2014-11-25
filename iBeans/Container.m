@@ -7,7 +7,7 @@
 //
 
 #define NUM_SEEDS ((int) 3)
-#define TRAY_NUM ((int) 7)
+
 
 #import "Container.h"
 
