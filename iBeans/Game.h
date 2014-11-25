@@ -9,7 +9,14 @@
 #import <Foundation/Foundation.h>
 
 @interface Game : NSObject
-@property (nonatomic) NSArray *players;
+@property (nonatomic) NSMutableArray *players;
 @property (nonatomic) int round;
+@property (nonatomic) NSString *winner;
+@property (nonatomic) NSDate *date;
+
+- (id) initGameWithMode: (int) mode;
+- (int) checkWinner;
+- (void) changeRound;
+- (void) gameController;
 
 @end

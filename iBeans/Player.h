@@ -18,12 +18,20 @@
 - (int) move: (int) pos;
 - (int) checkBowl;
 - (void) computeEndMove;
+- (void) captureSeeds: (int) last;
+- (int) getTrayCount;
+
+//player controller returns 1 if change round is necessary, or 0 if it is not
+- (int) playerController: (int) choice;
 
 
 @end
 
 @interface Human : Player
+- (int) humanController;
 @end
 
 @interface Computer : Player
+@property (nonatomic) int level;
+- (int) aiController;
 @end

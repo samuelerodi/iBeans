@@ -8,15 +8,23 @@
 #define NUM_BOWLS (int) 6
 #import "Container.h"
 #import "Player.h"
+#include <stdio.h>
+
 
 @implementation Player
 
 - (id) initWithBowlsAndOpponent: (Player*) user {
     // instanciate an array of Bowls plus Tray within the Player  set
     if (self =[super init]) {
-    
+        
+        self.name=[NSString alloc];
+        if ([self isKindOfClass:[Computer class]]){
+            [self setName:@"Computer"];
+                            };
+        
         for (int i = 1; i <= NUM_BOWLS; i++)
         {   [self.containers addObject: [[Bowl alloc] initWithPosition:(int) i ]];
+            NSLog(@"Bowl %i of %@s %i seeds", [self.containers[i-1] position], [self name], [self.containers[i-1] numOfSeeds]);
         };
         
         [self.containers addObject: [[Tray alloc] initWithPosition:(int) NUM_BOWLS+1 ]];
@@ -28,9 +36,6 @@
 };
 
 
-
-
-
 - (int) move:(int)pos {
     int last;
     int n_seeds;
@@ -38,12 +43,17 @@
     int nContainers;
     int opponentPos;
     
-    last=0;
+    
     
     //check for wrong input
-    if (pos>NUM_BOWLS-1) {
+    if (pos>NUM_BOWLS-1 || pos<0) {
         NSLog(@"Error: bowl to move from cannot be identified");
-        return 0;
+        return -1;
+    };
+    
+    if ([self.containers[pos] numOfSeeds]==0) {
+        NSLog(@"Error: bowl selected contains no seeds");
+        return -1;
     };
     
     
@@ -53,25 +63,41 @@
     //initialize for iteration
     currentPos=pos;
     nContainers=(NUM_BOWLS+1)*2;
-    
+    last=0;
     for (int i = n_seeds; i>0; i--) {
         
         if (self.containers[currentPos]) {
-            
-            //add incrementally 
+            //add incrementally
             [self.containers[currentPos] increment];
+            
+            //Display on Log current state of the game for player
+            if ([self.containers[currentPos] isKindOfClass:[Bowl class]]) {
+                NSLog(@"Bowl %i of %@s %i seeds", [self.containers[currentPos] position], [self name], [self.containers[currentPos] numOfSeeds]);}
+            else {
+                NSLog(@"Tray of %@s %i seeds", [self name], [self.containers[currentPos] numOfSeeds]);
+            };
+            
+                
         } else {
             //Drop in opponents'Bowls
             opponentPos=currentPos % (nContainers/2);
             [self.opponent.containers[opponentPos] increment];
+            
+            
+            //Display on Log current state of the game for opponent
+            if ([self.opponent.containers[opponentPos] isKindOfClass:[Bowl class]]) {
+                NSLog(@"Bowl %i of %@s %i seeds", [self.opponent.containers[opponentPos] position], [self.opponent name], [self.opponent.containers[opponentPos] numOfSeeds]);}
+            else {
+                NSLog(@"Tray of %@s %i seeds", [self.opponent  name], [self.opponent.containers[opponentPos] numOfSeeds]);
+            };
         };
         last=currentPos;
         currentPos=(currentPos+1) % (nContainers);
     };
+    
 
     return last;
 };
-
 
 
 - (int) checkBowl {
@@ -93,22 +119,103 @@
     seeds=0;
     for (int i=0; i<NUM_BOWLS; i++) {
         seeds=seeds + [self.opponent.containers[i] empty];
+        
+        //Display on Log
+        NSLog(@"Bowl %i of %@s %i seeds", [self.opponent.containers[i] position], [self.opponent name], [self.opponent.containers[i] numOfSeeds]);
     };
     [self.containers[NUM_BOWLS] addSeeds: (seeds)];
+    //Display on Log players' trays
+    NSLog(@"Tray of %@s %i seeds", [self.opponent  name], [self.opponent.containers[NUM_BOWLS] numOfSeeds]);
+    NSLog(@"Tray of %@s %i seeds", [self  name], [self.containers[NUM_BOWLS] numOfSeeds]);
 
 };
 
+
+- (void) captureSeeds:(int)last {
+    
+    int opponentBowl;
+    int seeds;
+    
+    if ([self.containers[last] isKindOfClass:[Bowl class]]) {
+        opponentBowl=NUM_BOWLS-last-1;
+        seeds=[self.opponent.containers[opponentBowl] empty] + [self.containers[last] empty];
+        [self.containers[NUM_BOWLS] addSeeds:seeds];
+        
+        //Display on Log status
+        NSLog(@"Bowl %i of %@s has %i seeds", [self.opponent.containers[opponentBowl] position], [self.opponent name], [self.opponent.containers[opponentBowl] numOfSeeds]);
+        NSLog(@"Tray of %@s has %i seeds",  [self name], [self.containers[NUM_BOWLS] numOfSeeds]);
+    }
+    else
+    {NSLog(@"Warning: Can't pick from opponent's tray");};
+
+};
+
+- (int) playerController: (int) choice {
+    int last;
+    
+    //make the moke
+    last=[self move:(choice)];
+    
+    
+    //check if last seed ended in player own's bowl or tray
+    if (self.containers[last]) {
+    
+        //check if it ended up in one's own tray
+        if ([self.containers[last] isKindOfClass:([Tray class])]) {
+            return 0;
+        }
+        
+        //check if it ended up in one's own empty bowl
+        else if ([self.containers[last] isKindOfClass:([Bowl class])] && [self.containers[last] numOfSeeds]== 1) {
+            [self captureSeeds:(last)];
+        }
+    }
+    
+    //flag to change round
+    return 1;
+};
+
+- (int) getTrayCount {
+    int count;
+    
+    count=[self.containers[NUM_BOWLS] numOfSeeds];
+    return count;
+};
 
 @end
 
 @implementation Human
-- (void) initWithName {
-    self.name=@"Human";
+- (int) humanController{
+    //Get a valid input from user
+    int choice;
+    int flag;
+    
+    printf("Enter the bowl to pick seeds from: ");
+    scanf("%i", &choice);
+    
+    while (choice<1 || choice>NUM_BOWLS) {
+        printf("Wrong input. Enter a number between 1 and %i :", NUM_BOWLS );
+        scanf("%i", &choice);
+    }
+    
+    flag=[self playerController:(choice-1)];
+    
+    //flag for round change
+    return flag;
 };
 @end
 
 @implementation Computer
-- (void) initWithName {
-    self.name=@"Computer";
+- (int) aiController{
+    int flag;
+    int choice;
+    //Implement AI control
+    
+    choice=5;
+    
+    flag=[self playerController:(choice-1)];
+    
+    //flag for round change
+    return flag;
 };
 @end
