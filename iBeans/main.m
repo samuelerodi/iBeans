@@ -6,14 +6,16 @@
 //  Copyright (c) 2014 Sam. All rights reserved.
 //
 
+
 #import "Game.h"
 #import <UIKit/UIKit.h>
 #import "AppDelegate.h"
 
 int main(int argc, char * argv[]) {
-    
 
- Game *myGame=[[Game alloc] initGameWithMode:1];
+
+    
+ Game *myGame=[[Game alloc] initGameWithMode:2];
     [myGame gameController];
     
     @autoreleasepool {

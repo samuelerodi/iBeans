@@ -29,11 +29,13 @@
     if (player1flag || player2flag) {
         //Game over
         [self.players[player2flag] computeEndMove];
-        win=[self.players[0] getTrayCount]>=[self.players[1] getTrayCount];
+        win=[self.players[0] getTrayCount]<[self.players[1] getTrayCount];
   
         self.winner=[self.players[win] name];
         [self setDate:[NSDate date]];
         
+        printf ("player1:  %d       player2:  %d\n", [self.players[0] getTrayCount], [self.players[1] getTrayCount]);
+        printf("Winner is player %d", win+1);
         return 1;
     }
     
@@ -45,9 +47,10 @@
         
         [self setDate:[NSDate date]];
         [self setRound:(0)];
-
+        self.players=[NSMutableArray new];
         switch (mode) {
             case 0:
+
                 [self.players addObject:[[Human alloc] initWithBowls]];
                 [self.players addObject:[[Human alloc] initWithBowls]];
                 break;
@@ -78,7 +81,8 @@
     int flag;
     
     while (![self checkWinner]) {
-    
+        
+        printf("\n\nplayer %i chooses ", ([self round]+1));
     
         if ([self.players[[self round]] isKindOfClass:[Human class]]) {
             flag=[self.players[[self round]] humanController];
@@ -90,9 +94,23 @@
             NSLog(@"Error: Unknown player type. Check set of players and properties");
             return;
         }
-    
+        
+           //display situation
+        printf("Player1\n");
+        [self.players[0] printPlayerState];
+
+        printf("\nPlayer2\n");
+        [self.players[1] printPlayerState];
+        
+        
         if (flag) {
             [self changeRound];
+            
+
+        }
+        else {
+            printf("\ngreat! it's still your turn!\n");
+        
         };
     };
     

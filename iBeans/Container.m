@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Sam. All rights reserved.
 //
 
-#define NUM_SEEDS ((int) 3)
+#define NUM_SEEDS 3
 
 
 #import "Container.h"
@@ -33,8 +33,9 @@
 };
 
 - (id) initWithPosition: (int) pos	{
-    if (self =[super init])
-    {   [self setPosition: (pos)];
+    self =[super init];
+    if (self)
+    {   [self setPosition: pos];        
         [self setNumOfSeeds: (NUM_SEEDS)];
         return self;}
     else return nil;
@@ -44,8 +45,9 @@
 @implementation Tray
 
 - (id) initWithPosition: (int) pos	{
-    if (self =[super init])
-    {   [self setPosition: (pos)];
+    self =[super init];
+    if (self)
+    {   [self setPosition: pos];
         [self setNumOfSeeds: 0];
         return self;}
     else return nil;

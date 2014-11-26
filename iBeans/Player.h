@@ -20,6 +20,7 @@
 - (void) computeEndMove;
 - (void) captureSeeds: (int) last;
 - (int) getTrayCount;
+- (void) printPlayerState;
 
 //player controller returns 1 if change round is necessary, or 0 if it is not
 - (int) playerController: (int) choice;
