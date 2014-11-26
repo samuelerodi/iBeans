@@ -14,7 +14,7 @@
 @property (nonatomic, strong) NSMutableArray *containers;
 @property (nonatomic, weak) Player *opponent;
 
-- (id) initWithBowlsAndOpponent: (Player*) user ;
+- (id) initWithBowls;
 - (int) move: (int) pos;
 - (int) checkBowl;
 - (void) computeEndMove;
