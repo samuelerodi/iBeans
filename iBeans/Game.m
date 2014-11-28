@@ -8,6 +8,9 @@
 #import "Player.h"
 #import "Game.h"
 
+
+
+
 @implementation Game
 
 - (void) changeRound {
@@ -87,6 +90,8 @@
     printf("\nPlayer2\n");
     [self.players[1] printPlayerState];
     printf("\n");
+
+
     
     
     //Perform basic tasks: check if there is a winner and/or change the round
@@ -98,6 +103,7 @@
         else {
             printf("\ngreat! it's still your turn!\n");
         };
+        [self.mainView updateButtonLabels];
         
 
      
@@ -110,8 +116,9 @@
         else if ([self.players[[self round]] isKindOfClass:[Computer class]]) {
         
             while (!win && [self.players[[self round]] isKindOfClass:[Computer class]]) {
+
+
                 //Call computer AI controller
-                
                 printf("\n\nComputer %i chooses ", ([self round]+1));
                 flag=[self.players[[self round]] aiController];
                 
@@ -121,6 +128,9 @@
                 printf("\nPlayer2\n");
                 [self.players[1] printPlayerState];
                 printf("\n");
+
+                
+
                 
                 //Perform basic tasks after computer turn: check if there is a winner or change the round
                 win=[self checkWinner];
@@ -131,10 +141,11 @@
                     else {
                     printf("\nsorry... still computer's turn!\n");
                     };
-                } else
-                    //Case there is a winner simply returns. Game gets terminated by check winner function.
-                    return;
-            
+                } else  {   
+                    //Case there is a winner simply returns. Game gets terminated by check winner function
+                    return;};
+                
+                [self.mainView updateButtonLabels];
             }
         
         }
@@ -144,8 +155,12 @@
             return;
         };
         
-     //Case there is a winner simply returns. Game gets terminated by check winner function.
-    } else return;
+     
+    }
+    
+    //Case there is a winner simply prints and returns. Game gets terminated by check winner function.
+    [self.mainView updateButtonLabels];
+
 };
 
 @end

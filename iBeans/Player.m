@@ -8,7 +8,7 @@
 #define NUM_BOWLS (int) 6
 #import "Container.h"
 #import "Player.h"
-#include <stdio.h>
+
 
 
 @implementation Player
@@ -30,11 +30,11 @@
         self.containers=[NSMutableArray new];
         for (int i = 1; i <= NUM_BOWLS; i++)
         {   [self.containers addObject: [[Bowl alloc] initWithPosition:i ]];
-            NSLog(@"Bowl %i of %@ has %i seeds", [self.containers[i-1] position], [self name], [self.containers[i-1] numOfSeeds]);
+            //NSLog(@"Bowl %i of %@ has %i seeds", [self.containers[i-1] position], [self name], [self.containers[i-1] numOfSeeds]);
         };
         
         [self.containers addObject: [[Tray alloc] initWithPosition:(int) NUM_BOWLS+1 ]];
-        NSLog(@"Tray %i of %@ has %i seeds", [self.containers[NUM_BOWLS] position], [self name], [self.containers[NUM_BOWLS] numOfSeeds]);
+        //NSLog(@"Tray %i of %@ has %i seeds", [self.containers[NUM_BOWLS] position], [self name], [self.containers[NUM_BOWLS] numOfSeeds]);
 
         return self;
     }

@@ -7,13 +7,16 @@
 //
 #import "Player.h"
 #import <Foundation/Foundation.h>
+#import "ViewController.h"
+
+
 
 @interface Game : NSObject
 @property (nonatomic) NSMutableArray *players;
 @property (nonatomic) int round;
 @property (nonatomic) NSString *winner;
 @property (nonatomic) NSDate *date;
-@property (nonatomic, weak) NSMutableArray *board;
+@property (nonatomic, weak) ViewController  *mainView;
 
 - (id) initGameWithMode: (int) mode;
 - (int) checkWinner;
