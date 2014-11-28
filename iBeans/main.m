@@ -15,8 +15,8 @@ int main(int argc, char * argv[]) {
 
 
     
- Game *myGame=[[Game alloc] initGameWithMode:2];
-    [myGame gameController];
+ Game *myGame=[[Game alloc] initGameWithMode:1];
+    [myGame gameController: 1];
     
     @autoreleasepool {
         return UIApplicationMain(argc, argv, nil, NSStringFromClass([AppDelegate class]));

@@ -46,7 +46,7 @@
     if (self =[super init]) {
         
         [self setDate:[NSDate date]];
-        [self setRound:(0)];
+        [self setRound:(1)];
         self.players=[NSMutableArray new];
         switch (mode) {
             case 0:
@@ -77,46 +77,67 @@
     else return nil;
 };
 
-- (void) gameController {
-    int flag;
+- (void) gameController: (int) flag {
+    int win;
     
-    while (![self checkWinner]) {
-        
-        printf("\n\nplayer %i chooses ", ([self round]+1));
     
-        if ([self.players[[self round]] isKindOfClass:[Human class]]) {
-            flag=[self.players[[self round]] humanController];
-        }
-        else if ([self.players[[self round]] isKindOfClass:[Computer class]]) {
-            flag=[self.players[[self round]] aiController];
-        }
-        else {
-            NSLog(@"Error: Unknown player type. Check set of players and properties");
-            return;
-        }
-        
-           //display situation
-        printf("Player1\n");
-        [self.players[0] printPlayerState];
-
-        printf("\nPlayer2\n");
-        [self.players[1] printPlayerState];
-        
-        
+    //Perform basic tasks: check if there is a winner and/or change the round
+    win=[self checkWinner];
+    if (!win){
         if (flag) {
             [self changeRound];
-            
-
         }
         else {
             printf("\ngreat! it's still your turn!\n");
-        
         };
-    };
-    
-    
-    
-    
+        
+
+     
+        //if next turn is a human turn, then break execution and wait for human controller trigger
+        if ([self.players[[self round]] isKindOfClass:[Human class]]) {
+            return;
+        }
+        
+        //if next turn is a computer turn, then call AI untill the turn is back to human or the game is over
+        else if ([self.players[[self round]] isKindOfClass:[Computer class]]) {
+        
+            while (![self checkWinner] || [self.players[[self round]] isKindOfClass:[Computer class]]) {
+                //Call computer AI controller
+                
+                printf("\n\nComputer %i chooses ", ([self round]+1));
+                flag=[self.players[[self round]] aiController];
+                
+                //display situation
+                printf("Player1\n");
+                [self.players[0] printPlayerState];
+                printf("\nPlayer2\n");
+                [self.players[1] printPlayerState];
+                
+                //Perform basic tasks after computer turn: check if there is a winner or change the round
+                win=[self checkWinner];
+                if (!win){
+                    if (flag) {
+                        [self changeRound];
+                    }
+                    else {
+                    printf("\nsorry... still computer's turn!\n");
+                    };
+                } else
+                    //Case there is a winner simply returns. Game gets terminated by check winner function.
+                    return;
+            
+            }
+        
+        }
+        
+        else {
+            NSLog(@"Error: Unknown player type. Check set of players and properties");
+            return;
+        };
+        
+     //Case there is a winner simply returns. Game gets terminated by check winner function.
+    } else return;
 };
 
 @end
+

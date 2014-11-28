@@ -17,6 +17,6 @@
 - (id) initGameWithMode: (int) mode;
 - (int) checkWinner;
 - (void) changeRound;
-- (void) gameController;
+- (void) gameController: (int) flag;
 
 @end

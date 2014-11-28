@@ -124,7 +124,7 @@
 
 - (void) computeEndMove {
     //move all the seeds of the opponents player in player's tray
-    printf("\nfinal move\n\n");
+    printf("\n\nWinner! Final move\n\n");
     
     int seeds;
     seeds=0;
@@ -134,7 +134,7 @@
         //Display on Log
         //NSLog(@"Bowl %i of %@s %i seeds", [self.opponent.containers[i] position], [self.opponent name], [self.opponent.containers[i] numOfSeeds]);
     };
-    [self.containers[NUM_BOWLS] addSeeds: (seeds)];
+    [self.opponent.containers[NUM_BOWLS] addSeeds: (seeds)];
     //Display on Log players' trays
     //NSLog(@"Tray of %@s %i seeds", [self.opponent  name], [self.opponent.containers[NUM_BOWLS] numOfSeeds]);
     //NSLog(@"Tray of %@s %i seeds", [self  name], [self.containers[NUM_BOWLS] numOfSeeds]);
@@ -227,12 +227,12 @@
     int flag;
     
     NSLog(@"Enter the bowl to pick seeds from: ");
-    scanf("%i", &choice);
+    choice=1;
     
-    while ((choice<1 || choice>NUM_BOWLS)&& ([self.containers[choice-1] numOfSeeds]!=0)) {
-        NSLog(@"Wrong input. Enter a number between 1 and %i :", NUM_BOWLS );
-        scanf("%i", &choice);
-    }
+    
+    while ((choice<1 || choice>NUM_BOWLS)|| ([self.containers[choice-1] numOfSeeds]==0)){
+        choice=arc4random_uniform(NUM_BOWLS)+1;
+    };
     
     printf(" %d\n", choice);
     
