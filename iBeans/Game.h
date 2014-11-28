@@ -13,6 +13,7 @@
 @property (nonatomic) int round;
 @property (nonatomic) NSString *winner;
 @property (nonatomic) NSDate *date;
+@property (nonatomic, weak) NSMutableArray *board;
 
 - (id) initGameWithMode: (int) mode;
 - (int) checkWinner;

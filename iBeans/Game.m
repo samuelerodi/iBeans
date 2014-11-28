@@ -71,6 +71,7 @@
                  
                  [self.players[0] setOpponent: self.players[1]];
                  [self.players[1] setOpponent: self.players[0]];
+        
 
     return self;
     }
@@ -79,6 +80,13 @@
 
 - (void) gameController: (int) flag {
     int win;
+    
+    //display situation
+    printf("Player1\n");
+    [self.players[0] printPlayerState];
+    printf("\nPlayer2\n");
+    [self.players[1] printPlayerState];
+    printf("\n");
     
     
     //Perform basic tasks: check if there is a winner and/or change the round
@@ -101,7 +109,7 @@
         //if next turn is a computer turn, then call AI untill the turn is back to human or the game is over
         else if ([self.players[[self round]] isKindOfClass:[Computer class]]) {
         
-            while (![self checkWinner] || [self.players[[self round]] isKindOfClass:[Computer class]]) {
+            while (!win && [self.players[[self round]] isKindOfClass:[Computer class]]) {
                 //Call computer AI controller
                 
                 printf("\n\nComputer %i chooses ", ([self round]+1));
@@ -112,6 +120,7 @@
                 [self.players[0] printPlayerState];
                 printf("\nPlayer2\n");
                 [self.players[1] printPlayerState];
+                printf("\n");
                 
                 //Perform basic tasks after computer turn: check if there is a winner or change the round
                 win=[self checkWinner];

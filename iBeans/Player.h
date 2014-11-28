@@ -14,6 +14,7 @@
 @property (nonatomic, strong) NSMutableArray *containers;
 @property (nonatomic, weak) Player *opponent;
 
+
 - (id) initWithBowls;
 - (int) move: (int) pos;
 - (int) checkBowl;
@@ -29,7 +30,7 @@
 @end
 
 @interface Human : Player
-- (int) humanController;
+- (int) humanController: (int) choice;
 @end
 
 @interface Computer : Player

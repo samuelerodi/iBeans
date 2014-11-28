@@ -131,13 +131,10 @@
     for (int i=0; i<NUM_BOWLS; i++) {
         seeds=seeds + [self.opponent.containers[i] empty];
         
-        //Display on Log
-        //NSLog(@"Bowl %i of %@s %i seeds", [self.opponent.containers[i] position], [self.opponent name], [self.opponent.containers[i] numOfSeeds]);
+
     };
     [self.opponent.containers[NUM_BOWLS] addSeeds: (seeds)];
-    //Display on Log players' trays
-    //NSLog(@"Tray of %@s %i seeds", [self.opponent  name], [self.opponent.containers[NUM_BOWLS] numOfSeeds]);
-    //NSLog(@"Tray of %@s %i seeds", [self  name], [self.containers[NUM_BOWLS] numOfSeeds]);
+
 
 };
 
@@ -154,9 +151,7 @@
         
         
         printf("capture seeds \n");
-        //Display on Log status
-        //NSLog(@"Bowl %i of %@ has %i seeds \n", [self.opponent.containers[opponentBowl] position], [self.opponent name], [self.opponent.containers[opponentBowl] numOfSeeds]);
-        //NSLog(@"Tray of %@ has %i seeds \n",  [self name], [self.containers[NUM_BOWLS] numOfSeeds]);
+
     }
     else
     {NSLog(@"Warning: Can't pick from opponent's tray");};
@@ -221,20 +216,20 @@
 
 
 @implementation Human
-- (int) humanController{
+- (int) humanController: (int) choice {
     //Get a valid input from user
-    int choice;
+
     int flag;
     
-    NSLog(@"Enter the bowl to pick seeds from: ");
-    choice=1;
+
     
+    printf("\nHuman %s chooses bowl %li: ", [[self name] UTF8String], (long)choice);
     
-    while ((choice<1 || choice>NUM_BOWLS)|| ([self.containers[choice-1] numOfSeeds]==0)){
-        choice=arc4random_uniform(NUM_BOWLS)+1;
+    if ((choice<1 || choice>NUM_BOWLS)|| ([self.containers[choice-1] numOfSeeds]==0)){
+        printf("\nINVALID BOWL SELECTED. Choose a different bowl. ");
+        return -1;
     };
-    
-    printf(" %d\n", choice);
+
     
     flag=[self playerController:(choice-1)];
     
