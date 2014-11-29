@@ -15,15 +15,14 @@
 
 - (void) increment;
 - (void) addSeeds: (int) seeds;
+- (id) initWithPosition: (int) pos;
 @end
 
 
 @interface Bowl : Container
 - (int) empty;
-- (id) initWithPosition: (int) pos;
 @end
 
 
 @interface Tray : Container
-- (id) initWithPosition: (int) pos;
 @end

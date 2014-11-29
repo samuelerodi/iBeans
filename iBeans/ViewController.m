@@ -7,24 +7,19 @@
 //
 
 #define NUM_BOWLS (int) 6
-#import "Container.h"
+
 #import "Player.h"
-#import "Game.h"
 #import "ViewController.h"
 
 @interface ViewController ()
 @property (strong, nonatomic) Game  *myGame;
-@property (nonatomic) NSInteger buttonCount;
-
-- (IBAction)pressBowl1:(id)sender;
-
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _myGame=[[Game alloc] initGameWithMode:1];
+    _myGame=[[Game alloc] initGameWithMode:0];
      _myGame.mainView=self;
     [_myGame gameController: 1];
 
@@ -66,7 +61,7 @@
 }
 
 - (IBAction)restart:(id)sender {
-    _myGame=[[Game alloc] initGameWithMode:1];
+    _myGame=[[Game alloc] initGameWithMode:0];
     _myGame.mainView=self;
     [_myGame gameController: 1];
     

@@ -6,7 +6,7 @@
 //  Copyright (c) 2014 Sam. All rights reserved.
 //
 #define NUM_BOWLS (int) 6
-#import "Container.h"
+
 #import "Player.h"
 
 
@@ -58,7 +58,7 @@
         return -1;
     };
     
-    if ([self.containers[pos] numOfSeeds]==0) {
+    if ([self.containers[pos] numOfSeeds]==0 || [self.containers isKindOfClass:([Tray   class])]) {
         NSLog(@"Error: bowl selected contains no seeds");
         return -1;
     };
@@ -144,7 +144,7 @@
     int opponentBowl;
     int seeds;
     
-    if ([self.containers[last] isKindOfClass:[Bowl class]]) {
+    if (last<NUM_BOWLS && [self.containers[last] isKindOfClass:[Bowl class]]) {
         opponentBowl=NUM_BOWLS-last-1;
         seeds=[self.opponent.containers[opponentBowl] empty] + [self.containers[last] empty];
         [self.containers[NUM_BOWLS] addSeeds:seeds];

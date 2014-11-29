@@ -20,6 +20,21 @@
 - (void) addSeeds:(int)seeds {
     self.numOfSeeds=self.numOfSeeds + seeds;
 };
+- (id) initWithPosition: (int) pos	{
+    self =[super init];
+    if (self)
+    {   [self setPosition: pos];
+        if ([self isKindOfClass:([Bowl class])]) {
+            [self setNumOfSeeds: (NUM_SEEDS)];
+        } else if ([self isKindOfClass:([Tray class])]) {
+            [self setNumOfSeeds: (0)];
+        }
+        else {
+            [self setNumOfSeeds: (0)];
+        }
+        return self;}
+    else return nil;
+};
 
 @end
 
@@ -32,26 +47,11 @@
     return nSeeds;
 };
 
-- (id) initWithPosition: (int) pos	{
-    self =[super init];
-    if (self)
-    {   [self setPosition: pos];        
-        [self setNumOfSeeds: (NUM_SEEDS)];
-        return self;}
-    else return nil;
-};
+
 @end
 
 @implementation Tray
 
-- (id) initWithPosition: (int) pos	{
-    self =[super init];
-    if (self)
-    {   [self setPosition: pos];
-        [self setNumOfSeeds: 0];
-        return self;}
-    else return nil;
-};
 @end
 
 
