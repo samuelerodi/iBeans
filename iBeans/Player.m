@@ -5,7 +5,7 @@
 //  Created by Sam on 11/24/14.
 //  Copyright (c) 2014 Sam. All rights reserved.
 //
-#define NUM_BOWLS (int) 6
+
 
 #import "Player.h"
 
@@ -124,7 +124,7 @@
 
 - (void) computeEndMove {
     //move all the seeds of the opponents player in player's tray
-    printf("\n\nWinner! Final move\n\n");
+    printf("\nWinner! Final move\n\n");
     
     int seeds;
     seeds=0;
@@ -223,7 +223,7 @@
     
 
     
-    printf("\nHuman %s chooses bowl %li: ", [[self name] UTF8String], (long)choice);
+    printf("\nHuman %s chooses bowl %li: \n", [[self name] UTF8String], (long)choice);
     
     if ((choice<1 || choice>NUM_BOWLS)|| ([self.containers[choice-1] numOfSeeds]==0)){
         printf("\nINVALID BOWL SELECTED. Choose a different bowl. ");

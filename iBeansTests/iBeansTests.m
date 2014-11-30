@@ -208,7 +208,18 @@
         };
     };
     XCTAssertNotNil([game winner], "Winner detected! Game correctly simulated! Functions correctly called! Testing terminated");
+    
+    int  state[14]={1,1,2,3,4,5,6,7,6,5,4,3,2,1};
+    int arSize=sizeof(state)/sizeof(int);
 
+    flag=[game setGameSituation:state andSize:arSize];
+    XCTAssert(flag, "operation correctly executed");
+
+    
+    int state2[5]={0,0,0,0,0};
+    arSize=sizeof(state2)/sizeof(int);
+    flag=[game setGameSituation:state2 andSize:arSize];
+    XCTAssertFalse(flag, "operation correctly rejected");
 
 }
 

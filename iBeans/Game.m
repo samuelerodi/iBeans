@@ -38,7 +38,7 @@
         [self setDate:[NSDate date]];
         
         printf ("player1:  %d       player2:  %d\n", [self.players[0] getTrayCount], [self.players[1] getTrayCount]);
-        printf("Winner is player %d", win+1);
+        printf("Winner is player %d\n\n", win+1);
         return 1;
     }
     
@@ -50,10 +50,11 @@
         
         [self setDate:[NSDate date]];
         [self setRound:(1)];
+        [self setGameMode:mode];
         self.players=[NSMutableArray new];
         switch (mode) {
             case 0:
-
+                
                 [self.players addObject:[[Human alloc] initWithBowls]];
                 [self.players addObject:[[Human alloc] initWithBowls]];
                 break;
@@ -85,14 +86,8 @@
     int win;
     
     //display situation
-    printf("Player1\n");
-    [self.players[0] printPlayerState];
-    printf("\nPlayer2\n");
-    [self.players[1] printPlayerState];
-    printf("\n");
+    [self printGameSituation];
 
-
-    
     
     //Perform basic tasks: check if there is a winner and/or change the round
     win=[self checkWinner];
@@ -101,7 +96,7 @@
             [self changeRound];
         }
         else {
-            printf("\ngreat! it's still your turn!\n");
+            printf("great! it's still your turn!\n\n");
         };
         [self.mainView updateButtonLabels];
         
@@ -123,11 +118,7 @@
                 flag=[self.players[[self round]] aiController];
                 
                 //display situation
-                printf("Player1\n");
-                [self.players[0] printPlayerState];
-                printf("\nPlayer2\n");
-                [self.players[1] printPlayerState];
-                printf("\n");
+                [self printGameSituation];
 
                 
 
@@ -139,7 +130,7 @@
                         [self changeRound];
                     }
                     else {
-                    printf("\nsorry... still computer's turn!\n");
+                    printf("sorry... still computer's turn!\n\n");
                     };
                 } else  {   
                     //Case there is a winner simply returns. Game gets terminated by check winner function
@@ -161,6 +152,51 @@
     //Case there is a winner simply prints and returns. Game gets terminated by check winner function.
     [self.mainView updateButtonLabels];
 
+};
+
+- (int) setGameSituation:(int [])seedsPosition andSize:(int)arraySize {
+    //Returns 1 if operation gets correctly performed, 0 otherwise.
+    
+    int player;
+    int container;
+    int temp;
+    
+    if (arraySize!=[[self.players[0] containers] count]+[[self.players[1] containers] count]) {
+        NSLog(@"Error: Array specified of incompatible size. Check array dimensions");
+        [self printGameSituation];
+        return 0;
+    }
+    for (int i=0; i<arraySize; i++) {
+        //check validity of the array
+        if (seedsPosition[i]<0)
+        {
+            NSLog(@"Error: Array specified of incompatible type or value. Check array dimensions");
+            [self printGameSituation];
+            return 0;
+        };
+    }
+    
+    for (int i=0; i<arraySize; i++) {
+        player=i/(NUM_BOWLS+1);
+        container=i %(NUM_BOWLS+1);
+        temp=seedsPosition[i];
+        [[self.players[player] containers][container] setNumOfSeeds:temp];
+    };
+        
+    NSLog(@"New configuration correctly set");
+    [self printGameSituation];
+    return 1;
+
+};
+
+
+- (void) printGameSituation {
+    //Display on Log GameSituation
+    printf("Player1\n");
+    [self.players[0] printPlayerState];
+    printf("\nPlayer2\n");
+    [self.players[1] printPlayerState];
+    printf("\n\n");
 };
 
 @end
