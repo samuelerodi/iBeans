@@ -9,9 +9,9 @@
 #import "Container.h"
 #import <UIKit/UIKit.h>
 
-@interface ViewController : UIViewController
-
+@interface GameViewController : UIViewController
+@property (nonatomic) int gameMode;
 @property (nonatomic) NSInteger buttonCount;
-
+- (void)startGame;
 - (IBAction)pressBowl:(id)sender;
 @end

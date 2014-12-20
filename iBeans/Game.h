@@ -7,7 +7,6 @@
 //
 #import "Player.h"
 #import <Foundation/Foundation.h>
-#import "ViewController.h"
 #define NUM_BOWLS (int) 6
 
 

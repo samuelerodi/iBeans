@@ -9,22 +9,30 @@
 #define NUM_BOWLS (int) 6
 
 #import "Player.h"
-#import "ViewController.h"
+#import "GameViewController.h"
 
-@interface ViewController ()
+@interface GameViewController ()
 @property (strong, nonatomic) Game  *myGame;
 @end
 
-@implementation ViewController
+@implementation GameViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
+    [super viewDidLoad];    
     [self startGame];
+    
+
     // Do any additional setup after loading the view, typically from a nib.
 }
-- (void)startGame {
-    self.myGame=[[Game alloc] initGameWithMode:0];
+- (NSUInteger)supportedInterfaceOrientations {
+    return (UIInterfaceOrientationMaskLandscape);
+}
+
+- (void) viewDidAppear:(BOOL)animated   {
+}
+
+- (void)startGame{
+    self.myGame=[[Game alloc] initGameWithMode:self.gameMode];
     
     [self deactivateButtons];
     [self.myGame gameController: 1];
@@ -34,6 +42,7 @@
     [self initButtonLabels];
     [self activateButtons];
 }
+
 
 
 - (void) initButtonLabels{
