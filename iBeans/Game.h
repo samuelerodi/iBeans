@@ -16,7 +16,6 @@
 @property (nonatomic) int round;
 @property (nonatomic) NSString *winner;
 @property (nonatomic) NSDate *date;
-@property (nonatomic, weak) ViewController  *mainView;
 @property (nonatomic) int gameMode;
 
 - (id) initGameWithMode: (int) mode;

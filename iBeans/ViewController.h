@@ -12,7 +12,6 @@
 @interface ViewController : UIViewController
 
 @property (nonatomic) NSInteger buttonCount;
-- (void) updateButtonLabels;
-- (IBAction)pressBowl1:(id)sender;
-@end
 
+- (IBAction)pressBowl:(id)sender;
+@end

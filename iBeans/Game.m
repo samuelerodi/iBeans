@@ -10,7 +10,6 @@
 
 
 
-
 @implementation Game
 
 - (void) changeRound {
@@ -24,7 +23,7 @@
     int player1flag;
     int player2flag;
     int win;
- //   NSString *myString;
+    //   NSString *myString;
     
     player1flag=[self.players[0] checkBowl];
     player2flag=[self.players[1] checkBowl];
@@ -33,7 +32,7 @@
         //Game over
         [self.players[player2flag] computeEndMove];
         win=[self.players[0] getTrayCount]<[self.players[1] getTrayCount];
-  
+        
         self.winner=[self.players[win] name];
         [self setDate:[NSDate date]];
         
@@ -55,29 +54,29 @@
         switch (mode) {
             case 0:
                 
-                [self.players addObject:[[Human alloc] initWithBowls]];
-                [self.players addObject:[[Human alloc] initWithBowls]];
+                [self.players addObject:[[Human alloc] initWithPlayerNumber:0]];
+                [self.players addObject:[[Human alloc] initWithPlayerNumber:1]];
                 break;
             case 1:
-                 [self.players addObject:[[Human alloc] initWithBowls]];
-                 [self.players addObject:[[Computer alloc] initWithBowls]];
+                [self.players addObject:[[Human alloc] initWithPlayerNumber:0]];
+                [self.players addObject:[[Computer alloc] initWithPlayerNumber:1]];
                 break;
             case 2:
-                [self.players addObject:[[Computer alloc] initWithBowls]];
-                [self.players addObject:[[Computer alloc] initWithBowls]];
+                [self.players addObject:[[Computer alloc] initWithPlayerNumber:0]];
+                [self.players addObject:[[Computer alloc] initWithPlayerNumber:1]];
                 break;
                 
             default:
                 NSLog(@"Error: Game mode must be either 0 (HvsH), 1 (HvsC) or 2 (CvsC)");
                 return nil;
                 break;
-                 };
-                 
-                 [self.players[0] setOpponent: self.players[1]];
-                 [self.players[1] setOpponent: self.players[0]];
+        };
         
-
-    return self;
+        [self.players[0] setOpponent: self.players[1]];
+        [self.players[1] setOpponent: self.players[0]];
+        
+        
+        return self;
     }
     else return nil;
 };
@@ -87,7 +86,7 @@
     
     //display situation
     [self printGameSituation];
-
+    
     
     //Perform basic tasks: check if there is a winner and/or change the round
     win=[self checkWinner];
@@ -98,10 +97,10 @@
         else {
             printf("great! it's still your turn!\n\n");
         };
-        [self.mainView updateButtonLabels];
         
-
-     
+        
+        
+        
         //if next turn is a human turn, then break execution and wait for human controller trigger
         if ([self.players[[self round]] isKindOfClass:[Human class]]) {
             return;
@@ -109,19 +108,19 @@
         
         //if next turn is a computer turn, then call AI untill the turn is back to human or the game is over
         else if ([self.players[[self round]] isKindOfClass:[Computer class]]) {
-        
+            
             while (!win && [self.players[[self round]] isKindOfClass:[Computer class]]) {
-
-
+                
+                
                 //Call computer AI controller
                 printf("\n\nComputer %i chooses ", ([self round]+1));
                 flag=[self.players[[self round]] aiController];
                 
                 //display situation
                 [self printGameSituation];
-
                 
-
+                
+                
                 
                 //Perform basic tasks after computer turn: check if there is a winner or change the round
                 win=[self checkWinner];
@@ -130,15 +129,15 @@
                         [self changeRound];
                     }
                     else {
-                    printf("sorry... still computer's turn!\n\n");
+                        printf("sorry... still computer's turn!\n\n");
                     };
-                } else  {   
+                } else  {
                     //Case there is a winner simply returns. Game gets terminated by check winner function
                     return;};
                 
-                [self.mainView updateButtonLabels];
+                
             }
-        
+            
         }
         
         else {
@@ -146,12 +145,12 @@
             return;
         };
         
-     
+        
     }
     
     //Case there is a winner simply prints and returns. Game gets terminated by check winner function.
-    [self.mainView updateButtonLabels];
-
+    
+    
 };
 
 - (int) setGameSituation:(int [])seedsPosition andSize:(int)arraySize {
@@ -182,11 +181,11 @@
         temp=seedsPosition[i];
         [[self.players[player] containers][container] setNumOfSeeds:temp];
     };
-        
+    
     NSLog(@"New configuration correctly set");
     [self printGameSituation];
     return 1;
-
+    
 };
 
 

@@ -53,7 +53,7 @@
 
 
 - (void) testPlayer {
-    Player *player=[[Player alloc] initWithBowls];
+    Player *player=[[Player alloc] initWithPlayerNumber:0];
     
     //check initialization
     XCTAssertNotNil(player, "player initialized");
@@ -68,7 +68,7 @@
     
     //check opponent
     XCTAssertNil([player opponent], "opponent not instanciated yet");
-    Player *player2=[[Player alloc] initWithBowls];
+    Player *player2=[[Player alloc] initWithPlayerNumber:1];
     player.opponent=player2;
     XCTAssertNotNil([player opponent], "opponent instanciated correctly");
     
@@ -98,7 +98,7 @@
     last=[player move:6];
     XCTAssert(last==-1, "returned exception, move not executed, Class of type Tray");
     XCTAssert([player getTrayCount]==1, "returned exception, move not executed, Class of type Tray");
-
+    
     last=[player move:2];
     [player captureSeeds:last];
     XCTAssert([player2.containers[0] numOfSeeds]==0, "capture seeds performed correctly");
@@ -106,15 +106,15 @@
     
     //check player controller
     int flag=[player playerController:4];
-     XCTAssert(flag, "if true, then change round, should be true");
+    XCTAssert(flag, "if true, then change round, should be true");
     flag=[player playerController:5];
-      XCTAssertFalse(flag, "if false, don t change round, should be false");
+    XCTAssertFalse(flag, "if false, don t change round, should be false");
     
 }
 
 - (void) testPlayer2 {
-    Human *player=[[Human alloc] initWithBowls];
-    Computer *player2=[[Computer alloc] initWithBowls];
+    Human *player=[[Human alloc] initWithPlayerNumber:0];
+    Computer *player2=[[Computer alloc] initWithPlayerNumber:1];
     player.opponent=player2;
     
     //check human controller
@@ -133,7 +133,7 @@
     
     //Check bowl function
     XCTAssertFalse([player checkBowl], "bowls are non empty");
- 
+    
     //Show state
     printf("\nplayer1\n");
     [player printPlayerState];
@@ -163,7 +163,7 @@
     [player computeEndMove];
     XCTAssert([player2 checkBowl], "bowls of player 2 should be empty");
     XCTAssert([player2 getTrayCount]==19, "seeds in tray of player 2 should be equal to 19");
-
+    
     
     //Show state
     printf("\nplayer1\n");
@@ -181,9 +181,9 @@
     XCTAssert([game.players[0] isKindOfClass:([Computer class])], "computer player is fine");
     XCTAssert([game.players[1] isKindOfClass:([Computer class])], "computer player");
     
-    game=[game initGameWithMode:0];  
+    game=[game initGameWithMode:0];
     XCTAssert([game.players[0] isKindOfClass:([Human class])], "one human players");
-    XCTAssert([game.players[1] isKindOfClass:([Human class])], "other human player");    
+    XCTAssert([game.players[1] isKindOfClass:([Human class])], "other human player");
     
     XCTAssertNil([game winner], "winner not set");
     
@@ -198,29 +198,29 @@
     
     //simulate game controller and full game
     int flag;
-
+    
     int sequence[11]= {4,1,11,8,2,10,5,10,4,8,6};
-
+    
     for (int i=0; i<11; i++) {
-    flag=[game.players[game.round] humanController: sequence[i]%7];
-    if (flag!=-1){
-        [game gameController:(flag)];
+        flag=[game.players[game.round] humanController: sequence[i]%7];
+        if (flag!=-1){
+            [game gameController:(flag)];
         };
     };
     XCTAssertNotNil([game winner], "Winner detected! Game correctly simulated! Functions correctly called! Testing terminated");
     
     int  state[14]={1,1,2,3,4,5,6,7,6,5,4,3,2,1};
     int arSize=sizeof(state)/sizeof(int);
-
+    
     flag=[game setGameSituation:state andSize:arSize];
     XCTAssert(flag, "operation correctly executed");
-
+    
     
     int state2[5]={0,0,0,0,0};
     arSize=sizeof(state2)/sizeof(int);
     flag=[game setGameSituation:state2 andSize:arSize];
     XCTAssertFalse(flag, "operation correctly rejected");
-
+    
 }
 
 - (void)testPerformanceExample {
