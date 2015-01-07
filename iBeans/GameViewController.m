@@ -18,7 +18,7 @@
 @implementation GameViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];    
+    [super viewDidLoad];
     [self startGame];
     
 
@@ -84,6 +84,33 @@
 }
 
 - (void) deactivateButtons {
+    //Hide and init Level sliders
+    UISlider *slider;
+    switch (self.gameMode) {
+        case 0:
+            slider=[self.view viewWithTag: 50];
+            [slider setHidden: true];
+            [slider setEnabled:false];
+            slider=[self.view viewWithTag: 51];
+            [slider setHidden: true];
+            [slider setEnabled:false];
+            break;
+        case 1:
+            slider=[self.view viewWithTag: 50];
+            [slider setHidden: true];
+            [slider setEnabled:false];
+            slider=[self.view viewWithTag: 51];
+            slider.value=0;
+        case 2:
+            slider=[self.view viewWithTag: 50];
+            slider.value=0;
+            slider=[self.view viewWithTag: 51];
+            slider.value=0;
+            break;
+    }
+    
+
+    
     UIButton *button;
     for (int i=1; i <=[self buttonCount]; i++) {
         
@@ -92,6 +119,7 @@
         
     }
 }
+
 
 - (void) activateButtons {
     
@@ -157,6 +185,28 @@
 - (IBAction)restart:(id)sender {
     [self exitGame];
     [self startGame];
+}
+
+- (IBAction)changeAILevel:(UISlider*)sender {
+
+    switch ([sender tag]) {
+        case 50:
+            if ([self.myGame.players[0] isKindOfClass:([Computer class])]) {
+                [self.myGame.players[0] setLevel:([sender value])];
+            }
+            else
+            { NSLog(@"Human is not a Computer! Can't assign AI Level");}
+            break;
+            
+        case 51:
+            if ([self.myGame.players[1] isKindOfClass:([Computer class])]) {
+                [self.myGame.players[1] setLevel:([sender value])];
+            }
+            else
+            { NSLog(@"Human is not a Computer! Can't assign AI Level");}
+            break;
+    }
+    
 }
 
 - (IBAction)pressBowl:(id)sender {

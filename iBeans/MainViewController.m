@@ -18,6 +18,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+
+
 }
 
 - (NSUInteger)supportedInterfaceOrientations {
@@ -35,6 +38,8 @@
     [super viewWillAppear:animated];
 
 }
+
+
 
 
 #pragma mark - Navigation

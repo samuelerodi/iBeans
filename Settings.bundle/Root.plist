@@ -30,7 +30,7 @@
 			<key>Title</key>
 			<string>Sounds</string>
 			<key>Key</key>
-			<string>enabled_preference</string>
+			<string>sounds</string>
 			<key>DefaultValue</key>
 			<true/>
 		</dict>
@@ -46,7 +46,7 @@
 			<key>Title</key>
 			<string>Player 1</string>
 			<key>Key</key>
-			<string>name_preference</string>
+			<string>player1Name</string>
 			<key>DefaultValue</key>
 			<string>Human</string>
 		</dict>
@@ -56,7 +56,7 @@
 			<key>Title</key>
 			<string>Player 2</string>
 			<key>Key</key>
-			<string>name_preference</string>
+			<string>player2Name</string>
 			<key>DefaultValue</key>
 			<string>Alien</string>
 		</dict>
@@ -70,7 +70,7 @@
 			<key>Type</key>
 			<string>PSSliderSpecifier</string>
 			<key>Key</key>
-			<string>slider_preference</string>
+			<string>animationSpeed</string>
 			<key>DefaultValue</key>
 			<integer>5</integer>
 			<key>MinimumValue</key>
