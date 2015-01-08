@@ -218,7 +218,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="siI-OP-VZi" kind="modal" modalTransitionStyle="crossDissolve" id="QrB-78-nd0"/>
+                                    <segue destination="qlZ-P7-a2V" kind="modal" modalTransitionStyle="crossDissolve" id="IrN-lQ-RsL"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -230,7 +230,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="666" y="-69"/>
+            <point key="canvasLocation" x="484" y="-103"/>
         </scene>
         <!--Main View Controller-->
         <scene sceneID="zbS-hu-4Od">
@@ -481,7 +481,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="nMH-2o-LSO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-620" y="-123"/>
+            <point key="canvasLocation" x="-581" y="-118"/>
         </scene>
         <!--Statistics-->
         <scene sceneID="LfL-d8-s95">
@@ -498,7 +498,7 @@
                                 <color key="sectionIndexBackgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1Xa-TT-3mR">
-                                <rect key="frame" x="191.99999935409033" y="509" width="112" height="30"/>
+                                <rect key="frame" x="191.99999911573627" y="509" width="112" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.94193892045454541" green="0.26849543436559792" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Reset Records">
@@ -535,7 +535,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="v1N-OU-JVW"/>
         <segue reference="bfN-jx-ShE"/>
     </inferredMetricsTieBreakers>
 </document>
