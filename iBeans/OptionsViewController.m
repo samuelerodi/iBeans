@@ -68,18 +68,22 @@
             break;
     }
     [self.defaults setObject:[NSString stringWithString:[textField text]] forKey:playerNum];
+    [self.defaults synchronize];
     return NO;
 }
 
 - (IBAction)speedSlider:(UISlider *)sender {
     float val=[sender value];
     [self.defaults setFloat:(val) forKey:(@"animationSpeed")];
+    [self.defaults synchronize];
 
 }
 
 - (IBAction)soundSwitch:(UISwitch *)sender {
     BOOL sound=[sender isOn];
     [self.defaults setBool:sound forKey:(@"sounds")];
+    [self.defaults synchronize];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -109,6 +113,7 @@
 }
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component	{
     [self.defaults setValue:self.pickerData[row] forKey:(@"theme")];
+    [self.defaults synchronize];
 
 }
 

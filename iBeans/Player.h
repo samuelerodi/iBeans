@@ -16,7 +16,7 @@
 
 
 - (id) initWithPlayerNumber: (int) playerNum;
-- (int) move: (int) pos;
+- (long) move: (long) pos;
 - (int) checkBowl;
 - (void) computeEndMove;
 - (void) captureSeeds: (int) last;
@@ -24,13 +24,13 @@
 - (void) printPlayerState;
 
 //player controller returns 1 if change round is necessary, or 0 if it is not
-- (int) playerController: (int) choice;
+- (int) playerController: (long) choice;
 
 
 @end
 
 @interface Human : Player
-- (int) humanController: (int) choice;
+- (int) humanController: (long) choice;
 @end
 
 @interface Computer : Player

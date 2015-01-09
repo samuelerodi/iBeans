@@ -21,6 +21,10 @@
     [super viewDidLoad];
     [self startGame];
     
+    [self saveStatsWinner:@"win" withLoser: @"lose" andScore:@"3"];
+        [self saveStatsWinner:@"win" withLoser: @"lose" andScore:@"9"];
+        [self saveStatsWinner:@"win" withLoser: @"lose" andScore:@"5"];
+    
 
     // Do any additional setup after loading the view, typically from a nib.
 }
@@ -213,7 +217,7 @@
     
     [self deactivateButtons];
     int flag;
-    int pos;
+    long pos;
     pos=[sender tag];
     NSLog(@"pressed %ld button", (long)pos);
     pos=pos%(NUM_BOWLS+1);
@@ -224,6 +228,47 @@
         
     };
     [self activateButtons];
+    
+}
+
+- (void) saveStatsWinner: (NSString*) winner withLoser: (NSString*) loser andScore: (NSString*) score {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *stats=[defaults mutableArrayValueForKey:@"stats"];
+    NSDictionary *result=@{@"winner": winner, @"loser":loser, @"score":score};
+    int maxStats=10;
+    
+    
+    if ([stats count]<maxStats) {
+        [stats addObject:result];
+        
+    }
+    else {
+        long worst;
+        worst=[[stats[(maxStats-1)] objectForKey:@"score"] integerValue];
+        
+        long n;
+        n=[score integerValue];
+        
+        if (n>=worst) {
+            [stats removeObjectAtIndex:(maxStats-1)];
+            [stats addObject:result];
+        }
+        
+    }
+    
+    //sort array and save results
+    NSSortDescriptor *sortDescriptor;
+    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"score" ascending:NO];
+    
+    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
+    NSArray *sortedArray;
+    sortedArray = [stats sortedArrayUsingDescriptors:sortDescriptors];
+
+    
+    
+    [defaults setObject:sortedArray forKey:@"stats"];
+    [defaults synchronize];
     
 }
 @end

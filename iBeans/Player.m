@@ -56,10 +56,10 @@
 };
 
 
-- (int) move:(int)pos {
-    int last;
+- (int) move:(long)pos {
+    long last;
     int n_seeds;
-    int currentPos;
+    long currentPos;
     int nContainers;
     int opponentPos;
     
@@ -174,7 +174,7 @@
 
 
 
-- (int) playerController: (int) choice {
+- (int) playerController: (long) choice {
     int last;
     
     //make the moke
@@ -229,7 +229,7 @@
 
 
 @implementation Human
-- (int) humanController: (int) choice {
+- (int) humanController: (long) choice {
     //Get a valid input from user
     
     int flag;

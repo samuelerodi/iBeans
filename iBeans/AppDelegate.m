@@ -30,6 +30,12 @@
     appDefaults = [NSDictionary dictionaryWithObject:@"Theme1" forKey:@"theme"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     
+    
+    //init Statistics array
+    NSMutableArray *stats=[[NSMutableArray alloc] initWithCapacity:0];
+    appDefaults = [NSDictionary dictionaryWithObject:stats forKey:@"stats"];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    
     return YES;
 }
 
