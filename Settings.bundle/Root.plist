@@ -74,9 +74,9 @@
 			<key>DefaultValue</key>
 			<integer>5</integer>
 			<key>MinimumValue</key>
-			<integer>1</integer>
+			<integer>0</integer>
 			<key>MaximumValue</key>
-			<integer>10</integer>
+			<integer>1</integer>
 		</dict>
 	</array>
 	<key>StringsTable</key>

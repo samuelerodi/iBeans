@@ -32,7 +32,7 @@
     [self.player2box setText:player2];
     self.player2box.delegate = self;
     
-    float speed= [self.defaults floatForKey:(@"animationSpeed")]/10;
+    float speed= [self.defaults floatForKey:(@"animationSpeed")];
     [self.speedSlider setValue:(speed)];
     
     
@@ -72,13 +72,13 @@
 }
 
 - (IBAction)speedSlider:(UISlider *)sender {
-    float val=[sender value]*10;
+    float val=[sender value];
     [self.defaults setFloat:(val) forKey:(@"animationSpeed")];
 
 }
 
 - (IBAction)soundSwitch:(UISwitch *)sender {
-    BOOL sound=[sender isEnabled];
+    BOOL sound=[sender isOn];
     [self.defaults setBool:sound forKey:(@"sounds")];
 }
 

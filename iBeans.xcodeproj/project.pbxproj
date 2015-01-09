@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		222747471A5FECED0071E99C /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = 222747461A5FECED0071E99C /* background.png */; };
 		22490BEC1A45C21900D02D8A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22490BEB1A45C21900D02D8A /* MainViewController.m */; };
 		22490BF21A45F07500D02D8A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 22490BF11A45F07500D02D8A /* Settings.bundle */; };
 		22490BF51A46061D00D02D8A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22490BF31A46061D00D02D8A /* Main.storyboard */; };
@@ -33,6 +34,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		222747461A5FECED0071E99C /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
 		22490BEA1A45C21900D02D8A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		22490BEB1A45C21900D02D8A /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		22490BF11A45F07500D02D8A /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -93,15 +95,16 @@
 		22490BED1A45E7A500D02D8A /* img */ = {
 			isa = PBXGroup;
 			children = (
+				222747461A5FECED0071E99C /* background.png */,
 			);
-			name = img;
+			path = img;
 			sourceTree = "<group>";
 		};
 		22490BEE1A45E7BD00D02D8A /* sound */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			name = sound;
+			path = sound;
 			sourceTree = "<group>";
 		};
 		B948D6EF1A22A993002EB9D5 = {
@@ -260,6 +263,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22490BF21A45F07500D02D8A /* Settings.bundle in Resources */,
+				222747471A5FECED0071E99C /* background.png in Resources */,
 				B948D70C1A22A993002EB9D5 /* LaunchScreen.xib in Resources */,
 				B948D7091A22A993002EB9D5 /* Images.xcassets in Resources */,
 				22490BF51A46061D00D02D8A /* Main.storyboard in Resources */,
