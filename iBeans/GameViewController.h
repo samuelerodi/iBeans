@@ -12,6 +12,9 @@
 @interface GameViewController : UIViewController
 @property (nonatomic) int gameMode;
 @property (nonatomic) NSInteger buttonCount;
+@property (weak, nonatomic) IBOutlet UIImageView *background;
+
 - (void)startGame;
 - (IBAction)pressBowl:(id)sender;
+
 @end

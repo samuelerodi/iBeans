@@ -13,21 +13,45 @@
 
 @interface GameViewController ()
 @property (strong, nonatomic) Game  *myGame;
+@property (weak, nonatomic) NSUserDefaults *defaults;
+@property (weak, nonatomic) NSString *themeUrl;
 @end
 
 @implementation GameViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self loadTheme];
     [self startGame];
     
     [self saveStatsWinner:@"win" withLoser: @"lose" andScore:@"3"];
-        [self saveStatsWinner:@"win" withLoser: @"lose" andScore:@"9"];
-        [self saveStatsWinner:@"win" withLoser: @"lose" andScore:@"5"];
-    
+   
 
     // Do any additional setup after loading the view, typically from a nib.
 }
+
+- (void) loadTheme {
+    self.defaults = [NSUserDefaults standardUserDefaults];
+    NSString *theme=[self.defaults objectForKey:@"theme"];
+    
+    
+    //set Background
+    if ([theme isEqualToString:@"Worms"])
+    {   self.themeUrl=@"worms_";
+    }
+    else if ([theme isEqualToString:@"Beans"]) {
+        self.themeUrl=@"beans_";
+    }
+    else if ([theme isEqualToString:@"Piranha"]) {
+        self.themeUrl=@"piranha_";
+    }
+
+    
+    NSString *background=[self.themeUrl stringByAppendingString:@"background.png"];
+    UIImage *image = [UIImage imageNamed:background];
+    [self.background setImage:image];
+}
+
 - (NSUInteger)supportedInterfaceOrientations {
     return (UIInterfaceOrientationMaskLandscape);
 }
@@ -53,17 +77,28 @@
     UIButton *button;
     int player;
     int container;
+    int seeds;
     
     for (int i=1; i <=[self buttonCount]; i++) {
         
         button=[self.view viewWithTag: i];
         player= ((i-1)/(NUM_BOWLS+1));
         container= (i-1)%(NUM_BOWLS+1);
+
         
         [[self.myGame.players[player] containers] [container]  addObserver:self forKeyPath:@"numOfSeeds" options:NSKeyValueObservingOptionNew context:nil];
         
-        NSString *title=[NSString stringWithFormat:@"%d", [[self.myGame.players[player] containers][container] numOfSeeds]];
+        seeds=[[self.myGame.players[player] containers][container] numOfSeeds];
+        NSString *title=[NSString stringWithFormat:@"%d", seeds];
         [button setTitle:title forState:UIControlStateNormal];
+        
+        
+        if (seeds>6) {
+            seeds=6;
+        }
+        NSString *path=[self.themeUrl stringByAppendingString:[NSString stringWithFormat:@"%d.png", seeds]];
+        UIImage *image = [UIImage imageNamed:path];
+        [button setBackgroundImage:image forState:UIControlStateNormal];
         
     };
     
@@ -161,10 +196,18 @@
             
             Container *container=object;
             int pos= [container position];
+            int seeds=container.numOfSeeds;
             
             UIButton *button=[self.view viewWithTag: pos];
-            NSString *title=[NSString stringWithFormat:@"%d", container.numOfSeeds];
+            NSString *title=[NSString stringWithFormat:@"%d", seeds];
             [button setTitle:title forState:UIControlStateNormal];
+
+            if (seeds>5) {
+                seeds=6;
+            }
+            NSString *path=[self.themeUrl stringByAppendingString:[NSString stringWithFormat:@"%d.png", seeds]];
+            UIImage *image = [UIImage imageNamed:path];
+            [button setBackgroundImage:image forState:UIControlStateNormal];
             
             [self.view setNeedsDisplay];
 

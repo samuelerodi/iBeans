@@ -37,7 +37,7 @@
     
     
     //initialize picker view
-    self.pickerData=@[@"Theme1", @"Theme2"];
+    self.pickerData=@[@"Beans", @"Worms", @"Piranha"];
     self.picker.dataSource = self;
     self.picker.delegate = self;
     NSString *val=[self.defaults stringForKey:(@"theme")];
