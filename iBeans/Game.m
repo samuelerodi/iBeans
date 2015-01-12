@@ -77,6 +77,20 @@
         
         [self.players[0] setOpponent: self.players[1]];
         [self.players[1] setOpponent: self.players[0]];
+        
+        
+        //Set players name
+        self.defaults = [NSUserDefaults standardUserDefaults];
+        if ([self.players[0] isKindOfClass:([Human class])]) {
+            NSString *player1 = [self.defaults stringForKey:(@"player1Name")];
+            [self.players[0] setName:player1];
+        }
+        if ([self.players[1] isKindOfClass:([Human class])]) {
+            NSString *player2 = [self.defaults stringForKey:(@"player2Name")];
+            [self.players[1] setName:player2];
+        }
+        
+        
         [self setHasWinner:false];
         
         return self;

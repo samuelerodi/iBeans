@@ -24,9 +24,8 @@
             [self setName:@"Computer"];
         }
         else if ([self isKindOfClass:[Human class]]) {
-            //NSLog(@"Insert player's name:");
-            //scanf("%f", _name);
-            self.name=@"human";
+
+            self.name=@"Human";
         };
         
         self.containers=[NSMutableArray new];

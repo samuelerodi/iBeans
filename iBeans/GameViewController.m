@@ -10,17 +10,18 @@
 
 #import "Player.h"
 #import "GameViewController.h"
+#import <QuartzCore/QuartzCore.h>
 
 @interface GameViewController ()
-@property (strong, nonatomic) Game  *myGame;
-@property (weak, nonatomic) NSUserDefaults *defaults;
-@property (weak, nonatomic) NSString *themeUrl;
+
+
 @end
 
 @implementation GameViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self.containerView setHidden:true];
     [self loadTheme];
     [self startGame];
     
@@ -76,6 +77,15 @@
     [self.myGame gameController: 1];
     
     self.buttonCount=[[self.myGame.players[0] containers] count]+ [[self.myGame.players[1] containers] count];
+    
+    
+    //Set labels
+    [self.player1Name setText:[self.myGame.players[0] name]];
+    [self.player2Name setText:[self.myGame.players[1] name]];
+    self.player1Name.layer.borderColor = [UIColor grayColor].CGColor;
+    self.player1Name.layer.borderWidth = 2.0;
+    self.player2Name.layer.borderColor = [UIColor grayColor].CGColor;
+    self.player2Name.layer.borderWidth = 2.0;
     
     [self initButtonLabels];
     [self activateButtons];
@@ -136,30 +146,7 @@
 
 - (void) deactivateButtons {
     //Hide and init Level sliders
-    UISlider *slider;
-    switch (self.gameMode) {
-        case 0:
-            slider=[self.view viewWithTag: 50];
-            [slider setHidden: true];
-            [slider setEnabled:false];
-            slider=[self.view viewWithTag: 51];
-            [slider setHidden: true];
-            [slider setEnabled:false];
-            break;
-        case 1:
-            slider=[self.view viewWithTag: 50];
-            [slider setHidden: true];
-            [slider setEnabled:false];
-            slider=[self.view viewWithTag: 51];
-            slider.value=0;
-        case 2:
-            slider=[self.view viewWithTag: 50];
-            slider.value=0;
-            slider=[self.view viewWithTag: 51];
-            slider.value=0;
-            break;
-    }
-    
+        
 
     
     UIButton *button;
@@ -230,6 +217,9 @@
     
 }
 
+- (IBAction)settingsButtonPressed:(UIButton *)sender {
+    [self.containerView setHidden:false];
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -248,33 +238,12 @@
     
 }
 
-- (IBAction)restart:(id)sender {
-    
+- (void)restart {
     [self exitGame];
     [self startGame];
 }
 
-- (IBAction)changeAILevel:(UISlider*)sender {
 
-    switch ([sender tag]) {
-        case 50:
-            if ([self.myGame.players[0] isKindOfClass:([Computer class])]) {
-                [self.myGame.players[0] setAiLevel:([sender value])];
-            }
-            else
-            { NSLog(@"Human is not a Computer! Can't assign AI Level");}
-            break;
-            
-        case 51:
-            if ([self.myGame.players[1] isKindOfClass:([Computer class])]) {
-                [self.myGame.players[1] setAiLevel:([sender value])];
-            }
-            else
-            { NSLog(@"Human is not a Computer! Can't assign AI Level");}
-            break;
-    }
-    
-}
 
 - (IBAction)pressBowl:(id)sender {
     //play sounds
@@ -317,38 +286,47 @@
     int maxStats=10;
     
     
-    if ([stats count]<maxStats) {
+    if ([stats count]==0) {
         [stats addObject:result];
+    } else {
         
-    }
-    else {
-        long worst;
-        worst=[[stats[(maxStats-1)] objectForKey:@"score"] integerValue];
-        
-        long n;
-        n=[score integerValue];
-        
-        if (n>=worst) {
-            [stats removeObjectAtIndex:(maxStats-1)];
-            [stats addObject:result];
+        //sort array and save results
+        int i=0;
+        if ([score integerValue]>[[[stats objectAtIndex:i] objectForKey:@"score"] integerValue]) {
+            [stats insertObject:result atIndex:i];
+            
+        } else {
+            BOOL stopCycle=true;
+            
+            while (i<[stats count] && stopCycle)
+            {
+                if ([[[stats objectAtIndex:i] objectForKey:@"score"] integerValue]>[score integerValue]) {
+                    i++;
+                }
+                else {
+                    stopCycle=false;}
+            }
+            [stats insertObject:result atIndex:i];
         }
-        
+        if ([stats count]>maxStats) {
+            [stats removeObjectAtIndex:(maxStats-1)];
+        }
     }
-    
-    //sort array and save results
-    NSSortDescriptor *sortDescriptor;
-    sortDescriptor = [[NSSortDescriptor alloc] initWithKey:@"score" ascending:NO];
-    
-    NSArray *sortDescriptors = [NSArray arrayWithObject:sortDescriptor];
-    NSArray *sortedArray;
-    sortedArray = [stats sortedArrayUsingDescriptors:sortDescriptors];
 
-    
+    NSArray *sortedArray=[NSArray arrayWithArray:stats];
     
     [defaults setObject:sortedArray forKey:@"stats"];
     [defaults synchronize];
     
 }
+- (void) refreshNames {
+    NSString *player1=[self.myGame.players[0] name];
+    NSString *player2=[self.myGame.players[1] name];
+    [self.player1Name setText:player1];
+    [self.player2Name setText:player2];
+}
+
+
 
 #pragma mark Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender

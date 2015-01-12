@@ -39,6 +39,9 @@
 		22779F1E1A61A144001D9E66 /* piranha_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 22779F161A61A144001D9E66 /* piranha_6.png */; };
 		22779F1F1A61A144001D9E66 /* piranha_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 22779F171A61A144001D9E66 /* piranha_background.png */; };
 		22821E011A5DB93D0068FF06 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22821E001A5DB93D0068FF06 /* OptionsViewController.m */; };
+		22C171CD1A643EF400C6EE7D /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C171CB1A643EF400C6EE7D /* settings.png */; };
+		22C171CE1A643EF400C6EE7D /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C171CC1A643EF400C6EE7D /* home.png */; };
+		22C171D11A6447AF00C6EE7D /* ChildSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22C171D01A6447AF00C6EE7D /* ChildSettingsViewController.m */; };
 		22E600991A63E729008CA89A /* beans_background.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 22E600911A63E729008CA89A /* beans_background.mp3 */; };
 		22E6009A1A63E729008CA89A /* button.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 22E600921A63E729008CA89A /* button.mp3 */; };
 		22E6009B1A63E729008CA89A /* menu.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 22E600931A63E729008CA89A /* menu.mp3 */; };
@@ -103,6 +106,10 @@
 		22779F171A61A144001D9E66 /* piranha_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = piranha_background.png; sourceTree = "<group>"; };
 		22821DFF1A5DB93D0068FF06 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
 		22821E001A5DB93D0068FF06 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
+		22C171CB1A643EF400C6EE7D /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
+		22C171CC1A643EF400C6EE7D /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home.png; sourceTree = "<group>"; };
+		22C171CF1A6447AF00C6EE7D /* ChildSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildSettingsViewController.h; sourceTree = "<group>"; };
+		22C171D01A6447AF00C6EE7D /* ChildSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ChildSettingsViewController.m; sourceTree = "<group>"; };
 		22E600911A63E729008CA89A /* beans_background.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = beans_background.mp3; sourceTree = "<group>"; };
 		22E600921A63E729008CA89A /* button.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = button.mp3; sourceTree = "<group>"; };
 		22E600931A63E729008CA89A /* menu.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = menu.mp3; sourceTree = "<group>"; };
@@ -152,6 +159,8 @@
 		22490BE91A45C1C500D02D8A /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
+				22C171CF1A6447AF00C6EE7D /* ChildSettingsViewController.h */,
+				22C171D01A6447AF00C6EE7D /* ChildSettingsViewController.m */,
 				B948D7021A22A993002EB9D5 /* GameViewController.h */,
 				B948D7031A22A993002EB9D5 /* GameViewController.m */,
 				22490BEA1A45C21900D02D8A /* MainViewController.h */,
@@ -167,6 +176,8 @@
 		22490BED1A45E7A500D02D8A /* img */ = {
 			isa = PBXGroup;
 			children = (
+				22C171CB1A643EF400C6EE7D /* settings.png */,
+				22C171CC1A643EF400C6EE7D /* home.png */,
 				22779ED91A617BB7001D9E66 /* app_background.png */,
 				22779EDB1A617DA8001D9E66 /* button.png */,
 				22779F0F1A61A144001D9E66 /* piranha */,
@@ -421,6 +432,7 @@
 				22779F1D1A61A144001D9E66 /* piranha_5.png in Resources */,
 				22E6009A1A63E729008CA89A /* button.mp3 in Resources */,
 				22779F0D1A619A92001D9E66 /* worms_6.png in Resources */,
+				22C171CD1A643EF400C6EE7D /* settings.png in Resources */,
 				22779F061A619A92001D9E66 /* beans_background.png in Resources */,
 				22779F0A1A619A92001D9E66 /* worms_3.png in Resources */,
 				22779F031A619A92001D9E66 /* beans_4.png in Resources */,
@@ -437,6 +449,7 @@
 				22779EE41A617DA8001D9E66 /* button.png in Resources */,
 				22779F1B1A61A144001D9E66 /* piranha_3.png in Resources */,
 				2219B9A41A6410DF00978CDF /* touch.mp3 in Resources */,
+				22C171CE1A643EF400C6EE7D /* home.png in Resources */,
 				22490BF21A45F07500D02D8A /* Settings.bundle in Resources */,
 				22E6009C1A63E729008CA89A /* pause.mp3 in Resources */,
 				22779F021A619A92001D9E66 /* beans_3.png in Resources */,
@@ -471,6 +484,7 @@
 			files = (
 				B948D72F1A22AD4B002EB9D5 /* Container.m in Sources */,
 				B948D7041A22A993002EB9D5 /* GameViewController.m in Sources */,
+				22C171D11A6447AF00C6EE7D /* ChildSettingsViewController.m in Sources */,
 				B948D7011A22A993002EB9D5 /* AppDelegate.m in Sources */,
 				B99F41041A23F35B009F25AE /* Game.m in Sources */,
 				22490BEC1A45C21900D02D8A /* MainViewController.m in Sources */,

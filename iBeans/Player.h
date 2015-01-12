@@ -15,6 +15,7 @@
 @property (nonatomic, weak) Player *opponent;
 
 
+
 - (id) initWithPlayerNumber: (int) playerNum;
 - (long) move: (long) pos;
 - (int) checkBowl;

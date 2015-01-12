@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
 
+
 @interface GameViewController : UIViewController
 {
     
@@ -20,9 +21,16 @@
 @property (nonatomic) int gameMode;
 @property (nonatomic) NSInteger buttonCount;
 @property (weak, nonatomic) IBOutlet UIImageView *background;
-
+@property (weak, nonatomic) IBOutlet UIView *containerView;
+@property (strong, nonatomic) Game  *myGame;
+@property (weak, nonatomic) NSUserDefaults *defaults;
+@property (weak, nonatomic) NSString *themeUrl;
+@property (weak, nonatomic) IBOutlet UILabel *player2Name;
+@property (weak, nonatomic) IBOutlet UILabel *player1Name;
 
 - (void)startGame;
 - (IBAction)pressBowl:(id)sender;
+- (void)restart;
+- (void) refreshNames;
 
 @end

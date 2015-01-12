@@ -19,6 +19,7 @@
 @property (nonatomic) int gameMode;
 @property (nonatomic) int finalScore;
 @property (nonatomic) BOOL hasWinner;
+@property (nonatomic,weak) NSUserDefaults *defaults;
 
 - (id) initGameWithMode: (int) mode;
 - (int) checkWinner;
