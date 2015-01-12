@@ -34,10 +34,13 @@
         win=[self.players[0] getTrayCount]<[self.players[1] getTrayCount];
         
         self.winner=[self.players[win] name];
+        self.loser=[self.players[!win] name];
         [self setDate:[NSDate date]];
+        self.finalScore=[self.players[win] getTrayCount];
         
         printf ("player1:  %d       player2:  %d\n", [self.players[0] getTrayCount], [self.players[1] getTrayCount]);
         printf("Winner is player %d\n\n", win+1);
+        [self setHasWinner:true];
         return 1;
     }
     
@@ -74,7 +77,7 @@
         
         [self.players[0] setOpponent: self.players[1]];
         [self.players[1] setOpponent: self.players[0]];
-        
+        [self setHasWinner:false];
         
         return self;
     }

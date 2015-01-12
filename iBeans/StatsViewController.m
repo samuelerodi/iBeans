@@ -65,7 +65,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
     
-    NSString* resultString= [NSString stringWithFormat:@"%-5ld %-20s %-15s %-2s",indexPath.row + 1,
+    NSString* resultString= [NSString stringWithFormat:@"%-5ld %-10s vs %-10s %-2s",indexPath.row + 1,
                              [[self.stats[indexPath.row] objectForKey:@"winner"] UTF8String],
                              [[self.stats[indexPath.row] objectForKey:@"loser"] UTF8String],
                              [[self.stats[indexPath.row] objectForKey:@"score"] UTF8String]];

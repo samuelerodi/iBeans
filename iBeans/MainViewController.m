@@ -30,8 +30,7 @@
 - (void) loadTheme {
     self.defaults = [NSUserDefaults standardUserDefaults];
     BOOL sound=[self.defaults boolForKey:@"sounds"];
-    NSURL *soundFileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"menu"
-                                                                                 ofType:@"mp3"]];
+
     NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle]
                                          pathForResource:@"menu"
                                          ofType:@"mp3"]];
@@ -39,6 +38,7 @@
     audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
     [audioPlayer prepareToPlay];
     [audioPlayer setNumberOfLoops:-1];//Infinite
+    [audioPlayer setVolume:0.5];
     if (sound) {
         
 
@@ -73,6 +73,7 @@
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     id dest=[segue destinationViewController];
+    BOOL sound=[self.defaults boolForKey:@"sounds"];
 
     
     if  ([dest isKindOfClass:([GameViewController class])]) {
@@ -80,7 +81,22 @@
         
         UIView *button= sender;
         gvc.gameMode=[button tag];
+        [button setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:1]];
+        
+        
         [audioPlayer stop];
+        NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle]
+                                             pathForResource:@"button"
+                                             ofType:@"mp3"]];
+        NSError *error;
+        audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+        [audioPlayer prepareToPlay];
+        if (sound) {
+            [audioPlayer play];
+            sleep(2);
+
+        }
+        
         
 
 

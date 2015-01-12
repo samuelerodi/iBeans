@@ -24,9 +24,6 @@
     [self loadTheme];
     [self startGame];
     
-    [self saveStatsWinner:@"win" withLoser: @"lose" andScore:@"3"];
-   
-
     // Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -56,6 +53,7 @@
         audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
         [audioPlayer prepareToPlay];
         [audioPlayer setNumberOfLoops:-1];//Infinite
+         [audioPlayer setVolume:0.6];
     }
     
     
@@ -242,6 +240,11 @@
     [self stopButtonsObservation];
     [audioPlayer stop];
     [audioPlayer setCurrentTime:0];
+    if ([self.myGame hasWinner]) {
+        NSString* score=[NSString stringWithFormat:@"%d", self.myGame.finalScore];
+        
+        [self saveStatsWinner:self.myGame.winner withLoser: self.myGame.loser  andScore:score];
+    }
     
 }
 
@@ -274,6 +277,21 @@
 }
 
 - (IBAction)pressBowl:(id)sender {
+    //play sounds
+    BOOL sound=[self.defaults boolForKey:@"sounds"];
+    if (sound) {
+
+        NSString *soundpath=@"touch";
+        NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle]
+                                             pathForResource:soundpath
+                                             ofType:@"mp3"]];
+        NSError *error;
+        audioPlayerTouch = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+        [audioPlayerTouch prepareToPlay];
+        [audioPlayerTouch play];
+    }
+    //here goes animation
+    
     
     [self deactivateButtons];
     int flag;
@@ -335,6 +353,7 @@
 #pragma mark Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
+    [self exitGame];
     [audioPlayer stop];
 }
 

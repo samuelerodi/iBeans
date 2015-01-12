@@ -14,6 +14,7 @@
 {
     
     AVAudioPlayer *audioPlayer;
+    AVAudioPlayer *audioPlayerTouch;
     
 }
 @property (nonatomic) int gameMode;

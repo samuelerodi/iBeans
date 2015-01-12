@@ -205,7 +205,7 @@
                                 <rect key="frame" x="458" y="116" width="88" height="84"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="26"/>
-                                <inset key="contentEdgeInsets" minX="0.0" minY="50" maxX="0.0" maxY="0.0"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="55" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="10">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -303,7 +303,7 @@
                                 <rect key="frame" x="24" y="116" width="88" height="84"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="26"/>
-                                <inset key="contentEdgeInsets" minX="0.0" minY="50" maxX="0.0" maxY="0.0"/>
+                                <inset key="contentEdgeInsets" minX="0.0" minY="55" maxX="0.0" maxY="0.0"/>
                                 <state key="normal" title="10">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -630,7 +630,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1Xa-TT-3mR">
-                                <rect key="frame" x="191.99999911573627" y="518" width="112" height="30"/>
+                                <rect key="frame" x="191.99999886483729" y="518" width="112" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.94193892045454541" green="0.26849543436559792" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Reset Records">

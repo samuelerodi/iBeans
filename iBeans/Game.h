@@ -14,8 +14,11 @@
 @property (nonatomic) NSMutableArray *players;
 @property (nonatomic) int round;
 @property (nonatomic) NSString *winner;
+@property (nonatomic) NSString *loser;
 @property (nonatomic) NSDate *date;
 @property (nonatomic) int gameMode;
+@property (nonatomic) int finalScore;
+@property (nonatomic) BOOL hasWinner;
 
 - (id) initGameWithMode: (int) mode;
 - (int) checkWinner;

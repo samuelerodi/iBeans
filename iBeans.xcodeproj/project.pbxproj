@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2219B9A41A6410DF00978CDF /* touch.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2219B9A31A6410DF00978CDF /* touch.mp3 */; };
 		2227474A1A5FFFA20071E99C /* StatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 222747491A5FFFA20071E99C /* StatsViewController.m */; };
 		22490BEC1A45C21900D02D8A /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22490BEB1A45C21900D02D8A /* MainViewController.m */; };
 		22490BF21A45F07500D02D8A /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 22490BF11A45F07500D02D8A /* Settings.bundle */; };
@@ -67,6 +68,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2219B9A31A6410DF00978CDF /* touch.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = touch.mp3; sourceTree = "<group>"; };
 		222747481A5FFFA20071E99C /* StatsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StatsViewController.h; sourceTree = "<group>"; };
 		222747491A5FFFA20071E99C /* StatsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StatsViewController.m; sourceTree = "<group>"; };
 		22490BEA1A45C21900D02D8A /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 			children = (
 				22E600901A63E729008CA89A /* beans */,
 				22E600921A63E729008CA89A /* button.mp3 */,
+				2219B9A31A6410DF00978CDF /* touch.mp3 */,
 				22E600931A63E729008CA89A /* menu.mp3 */,
 				22E600941A63E729008CA89A /* pause.mp3 */,
 				22E600951A63E729008CA89A /* piranha */,
@@ -433,6 +436,7 @@
 				22779F081A619A92001D9E66 /* worms_1.png in Resources */,
 				22779EE41A617DA8001D9E66 /* button.png in Resources */,
 				22779F1B1A61A144001D9E66 /* piranha_3.png in Resources */,
+				2219B9A41A6410DF00978CDF /* touch.mp3 in Resources */,
 				22490BF21A45F07500D02D8A /* Settings.bundle in Resources */,
 				22E6009C1A63E729008CA89A /* pause.mp3 in Resources */,
 				22779F021A619A92001D9E66 /* beans_3.png in Resources */,
