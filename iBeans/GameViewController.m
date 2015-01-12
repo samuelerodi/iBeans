@@ -33,7 +33,7 @@
 - (void) loadTheme {
     self.defaults = [NSUserDefaults standardUserDefaults];
     NSString *theme=[self.defaults objectForKey:@"theme"];
-    
+    BOOL sound=[self.defaults boolForKey:@"sounds"];
     
     //set Background
     if ([theme isEqualToString:@"Worms"])
@@ -46,6 +46,18 @@
         self.themeUrl=@"piranha_";
     }
 
+    if (sound) {
+        
+        NSString *soundpath=[self.themeUrl stringByAppendingString:@"background"];
+        NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle]
+                                             pathForResource:soundpath
+                                             ofType:@"mp3"]];
+        NSError *error;
+        audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+        [audioPlayer prepareToPlay];
+        [audioPlayer setNumberOfLoops:-1];//Infinite
+    }
+    
     
     NSString *background=[self.themeUrl stringByAppendingString:@"background.png"];
     UIImage *image = [UIImage imageNamed:background];
@@ -69,6 +81,8 @@
     
     [self initButtonLabels];
     [self activateButtons];
+    [audioPlayer play];
+    
 }
 
 
@@ -226,10 +240,13 @@
 
 - (void) exitGame {
     [self stopButtonsObservation];
+    [audioPlayer stop];
+    [audioPlayer setCurrentTime:0];
     
 }
 
 - (IBAction)restart:(id)sender {
+    
     [self exitGame];
     [self startGame];
 }
@@ -239,7 +256,7 @@
     switch ([sender tag]) {
         case 50:
             if ([self.myGame.players[0] isKindOfClass:([Computer class])]) {
-                [self.myGame.players[0] setLevel:([sender value])];
+                [self.myGame.players[0] setAiLevel:([sender value])];
             }
             else
             { NSLog(@"Human is not a Computer! Can't assign AI Level");}
@@ -247,7 +264,7 @@
             
         case 51:
             if ([self.myGame.players[1] isKindOfClass:([Computer class])]) {
-                [self.myGame.players[1] setLevel:([sender value])];
+                [self.myGame.players[1] setAiLevel:([sender value])];
             }
             else
             { NSLog(@"Human is not a Computer! Can't assign AI Level");}
@@ -314,6 +331,13 @@
     [defaults synchronize];
     
 }
+
+#pragma mark Navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    [audioPlayer stop];
+}
+
 @end
 
 

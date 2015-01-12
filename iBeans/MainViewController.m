@@ -9,17 +9,44 @@
 #import "MainViewController.h"
 #import "GameViewController.h"
 
-@interface MainViewController ()
 
+
+@interface MainViewController ()
+@property (weak, nonatomic) NSUserDefaults *defaults;
+@property (weak, nonatomic) NSString *themeUrl;
 @end
 
 @implementation MainViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self loadTheme];
     // Do any additional setup after loading the view.
     
 
+
+}
+
+- (void) loadTheme {
+    self.defaults = [NSUserDefaults standardUserDefaults];
+    BOOL sound=[self.defaults boolForKey:@"sounds"];
+    NSURL *soundFileURL = [NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"menu"
+                                                                                 ofType:@"mp3"]];
+    NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle]
+                                         pathForResource:@"menu"
+                                         ofType:@"mp3"]];
+    NSError *error;
+    audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
+    [audioPlayer prepareToPlay];
+    [audioPlayer setNumberOfLoops:-1];//Infinite
+    if (sound) {
+        
+
+        [audioPlayer play];
+
+
+    }
+    
 
 }
 
@@ -53,11 +80,19 @@
         
         UIView *button= sender;
         gvc.gameMode=[button tag];
+        [audioPlayer stop];
         
 
 
-    } else {
-    //Display Navigation Bar
+    } else if   ([dest isKindOfClass:([OptionsViewController class])])  {
+            //Display Navigation Bar
+        [self.navigationController setNavigationBarHidden:NO];
+        OptionsViewController *ovc = dest;
+        ovc.audioPlayer=audioPlayer;
+
+    }
+    else {
+        
         [self.navigationController setNavigationBarHidden:NO];
     }
     

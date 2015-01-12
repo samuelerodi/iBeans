@@ -83,6 +83,10 @@
     BOOL sound=[sender isOn];
     [self.defaults setBool:sound forKey:(@"sounds")];
     [self.defaults synchronize];
+    if (sound) {
+        [self.audioPlayer play];
+    } else
+        [self.audioPlayer stop];
     
 }
 

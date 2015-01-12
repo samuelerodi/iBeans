@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 
 @interface OptionsViewController : UIViewController  <UIPickerViewDataSource, UIPickerViewDelegate>
+@property (retain, nonatomic) AVAudioPlayer *audioPlayer;
 @property (weak, nonatomic) IBOutlet UIPickerView *picker;
 @property (weak, nonatomic) IBOutlet UITextField *player1box;
 @property (weak, nonatomic) IBOutlet UITextField *player2box;

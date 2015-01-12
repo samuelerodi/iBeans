@@ -34,6 +34,6 @@
 @end
 
 @interface Computer : Player
-@property (nonatomic) int level;
+@property (nonatomic) int aiLevel;
 - (int) aiController;
 @end

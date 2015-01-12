@@ -7,6 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
+#import "OptionsViewController.h"
 
-@interface MainViewController : UIViewController
+@interface MainViewController : UIViewController 
+{
+    
+    AVAudioPlayer *audioPlayer;
+    
+}
+
 @end

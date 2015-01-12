@@ -630,7 +630,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1Xa-TT-3mR">
-                                <rect key="frame" x="191.9999997956412" y="518" width="112" height="30"/>
+                                <rect key="frame" x="191.99999911573627" y="518" width="112" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.94193892045454541" green="0.26849543436559792" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Reset Records">
@@ -648,7 +648,7 @@
                             </button>
                             <imageView userInteractionEnabled="NO" alpha="0.44999999999999962" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="app_background.png" id="PIi-aQ-Dgc">
                                 <rect key="frame" x="-1" y="0.0" width="321" height="568"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

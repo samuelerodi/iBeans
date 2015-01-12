@@ -8,11 +8,18 @@
 #import "Game.h"
 #import "Container.h"
 #import <UIKit/UIKit.h>
+#import <AVFoundation/AVFoundation.h>
 
 @interface GameViewController : UIViewController
+{
+    
+    AVAudioPlayer *audioPlayer;
+    
+}
 @property (nonatomic) int gameMode;
 @property (nonatomic) NSInteger buttonCount;
 @property (weak, nonatomic) IBOutlet UIImageView *background;
+
 
 - (void)startGame;
 - (IBAction)pressBowl:(id)sender;
