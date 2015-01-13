@@ -16,6 +16,7 @@
 @property (nonatomic) NSString *winner;
 @property (nonatomic) NSString *loser;
 @property (nonatomic) NSDate *date;
+@property (nonatomic) int win;
 @property (nonatomic) int gameMode;
 @property (nonatomic) int finalScore;
 @property (nonatomic) BOOL hasWinner;

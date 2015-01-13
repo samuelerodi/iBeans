@@ -11,6 +11,8 @@
 @interface StatsViewController ()
 @property (weak, nonatomic) NSArray* stats;
 @property (weak, nonatomic) NSUserDefaults* defaults;
+@property (weak, nonatomic) IBOutlet UILabel *humanLabel;
+@property (weak, nonatomic) IBOutlet UILabel *computerLabel;
 
 
 @end
@@ -26,7 +28,7 @@
     self.statsTable.dataSource=self;
     self.statsTable.delegate=self;
     
-
+    self.statsTable.backgroundColor = [UIColor colorWithRed:0.3 green:0.3 blue:0.3 alpha:0.6];
     
     // Do any additional setup after loading the view.
 }
@@ -39,11 +41,21 @@
 - (void) loadStats {
     self.defaults = [NSUserDefaults standardUserDefaults];
     self.stats=[self.defaults arrayForKey:@"stats"];
-
+    NSMutableArray* victory=[self.defaults mutableArrayValueForKey:@"victory"];
+    if ([victory count]>0) {
+        self.humanLabel.text=[NSString stringWithFormat:@"%ld", (long)[victory[0] integerValue]];
+        self.computerLabel.text=[NSString stringWithFormat:@"%ld", (long)[victory[1] integerValue]];
+    }
+    else {
+        self.humanLabel.text=@"0";
+        self.computerLabel.text=@"0";
+    }
 }
 - (IBAction)resetStats:(UIButton *)sender {
     NSMutableArray *newStats=[[NSMutableArray alloc] initWithCapacity:0];
     [self.defaults setObject:newStats forKey:@"stats"];
+    NSMutableArray *victory=[[NSMutableArray alloc] initWithCapacity:0];
+    [self.defaults setObject:victory forKey:@"stats"];
     [self.defaults synchronize];
     [self loadStats];
     [self.statsTable reloadData];
@@ -64,13 +76,21 @@
         
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:simpleTableIdentifier];
     }
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"HH:mm dd-MM"];
     
-    NSString* resultString= [NSString stringWithFormat:@"%-5ld %-10s vs %-10s %-2s",indexPath.row + 1,
-                             [[self.stats[indexPath.row] objectForKey:@"winner"] UTF8String],
-                             [[self.stats[indexPath.row] objectForKey:@"loser"] UTF8String],
-                             [[self.stats[indexPath.row] objectForKey:@"score"] UTF8String]];
+    NSString *temp = [NSString stringWithFormat:@"%-2s \t%@ \t     %@",
+                              [[self.stats[indexPath.row] objectForKey:@"score"] UTF8String],
+                              [[self.stats[indexPath.row] objectForKey:@"winner"] stringByPaddingToLength:15 withString:@" " startingAtIndex:0],
+                              [[self.stats[indexPath.row] objectForKey:@"loser"] stringByPaddingToLength:12 withString:@" " startingAtIndex:0]];
+    
+    NSString* resultString= [NSString stringWithFormat:@"%@\t%@", temp,
+                             [dateFormatter stringFromDate:([self.stats[indexPath.row] objectForKey:@"date"])]];
     cell.textLabel.text = resultString;
+    cell.textLabel.font = [UIFont systemFontOfSize:11.0];
+    cell.backgroundColor=[UIColor colorWithRed:0.7 green:0.7 blue:0.7 alpha:0.8];
     return cell;
+    
 }
 
 

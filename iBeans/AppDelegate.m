@@ -36,6 +36,10 @@
     appDefaults = [NSDictionary dictionaryWithObject:stats forKey:@"stats"];
     [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
     
+    NSMutableArray *victory=[[NSMutableArray alloc] initWithCapacity:2];
+    appDefaults = [NSDictionary dictionaryWithObject:victory forKey:@"victory"];
+    [[NSUserDefaults standardUserDefaults] registerDefaults:appDefaults];
+    
     return YES;
 }
 

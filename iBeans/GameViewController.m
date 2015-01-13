@@ -232,9 +232,26 @@
     [audioPlayer setCurrentTime:0];
     if ([self.myGame hasWinner]) {
         NSString* score=[NSString stringWithFormat:@"%d", self.myGame.finalScore];
+        [self saveStatsWinner:self.myGame.winner withLoser: self.myGame.loser  andScore:score andDate:self.myGame.date];
+        if (self.gameMode==1) {
+            [self victoryCount];
+        }
         
-        [self saveStatsWinner:self.myGame.winner withLoser: self.myGame.loser  andScore:score];
     }
+    
+}
+- (void) victoryCount {
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSMutableArray *victoryCount=[defaults mutableArrayValueForKey:@"victory"];
+    if ([victoryCount count]==0)
+    {[victoryCount addObject:[[NSNumber alloc] initWithInt:0]];
+        [victoryCount addObject:[[NSNumber alloc] initWithInt:0]];
+    }
+    NSNumber* temp=victoryCount[self.myGame.win];
+    victoryCount[self.myGame.win]= [NSNumber numberWithLong:[temp integerValue]+1];
+    NSArray* victory=[NSArray arrayWithArray:victoryCount];
+    [defaults setObject:victory   forKey:@"victory"];
+    [defaults synchronize];
     
 }
 
@@ -278,11 +295,11 @@
     
 }
 
-- (void) saveStatsWinner: (NSString*) winner withLoser: (NSString*) loser andScore: (NSString*) score {
+- (void) saveStatsWinner: (NSString*) winner withLoser: (NSString*) loser andScore: (NSString*) score andDate: (NSDate*) date {
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSMutableArray *stats=[defaults mutableArrayValueForKey:@"stats"];
-    NSDictionary *result=@{@"winner": winner, @"loser":loser, @"score":score};
+    NSDictionary *result=@{@"winner": winner, @"loser":loser, @"score":score, @"date":date};
     int maxStats=10;
     
     

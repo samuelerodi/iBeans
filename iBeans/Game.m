@@ -22,7 +22,6 @@
     
     int player1flag;
     int player2flag;
-    int win;
     //   NSString *myString;
     
     player1flag=[self.players[0] checkBowl];
@@ -31,15 +30,15 @@
     if (player1flag || player2flag) {
         //Game over
         [self.players[player2flag] computeEndMove];
-        win=[self.players[0] getTrayCount]<[self.players[1] getTrayCount];
+        self.win=[self.players[0] getTrayCount]<[self.players[1] getTrayCount];
         
-        self.winner=[self.players[win] name];
-        self.loser=[self.players[!win] name];
+        self.winner=[self.players[self.win] name];
+        self.loser=[self.players[!self.win] name];
         [self setDate:[NSDate date]];
-        self.finalScore=[self.players[win] getTrayCount];
+        self.finalScore=[self.players[self.win] getTrayCount];
         
         printf ("player1:  %d       player2:  %d\n", [self.players[0] getTrayCount], [self.players[1] getTrayCount]);
-        printf("Winner is player %d\n\n", win+1);
+        printf("Winner is player %d\n\n", self.win+1);
         [self setHasWinner:true];
         return 1;
     }
