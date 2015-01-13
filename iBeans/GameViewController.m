@@ -13,15 +13,22 @@
 #import <QuartzCore/QuartzCore.h>
 
 @interface GameViewController ()
-
-
+{
+    float animationTime;
+}
+@property (weak, nonatomic) IBOutlet UIImageView *hand;
 @end
 
 @implementation GameViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    //Init view Item
     [self.containerView setHidden:true];
+    //move hand away
+    self.hand.center=CGPointMake(0.0f, 400.0f);
+    
     [self loadTheme];
     [self startGame];
     
@@ -43,7 +50,8 @@
     else if ([theme isEqualToString:@"Piranha"]) {
         self.themeUrl=@"piranha_";
     }
-
+    
+    //Activate Sounds
     if (sound) {
         
         NSString *soundpath=[self.themeUrl stringByAppendingString:@"background"];
@@ -57,10 +65,15 @@
          [audioPlayer setVolume:0.6];
     }
     
-    
+    //Set Backgroun Image
     NSString *background=[self.themeUrl stringByAppendingString:@"background.png"];
     UIImage *image = [UIImage imageNamed:background];
     [self.background setImage:image];
+    
+    //Set AnimationSpeed
+    animationTime=(1.1-[[self.defaults valueForKey:@"animationSpeed"] floatValue]);
+    
+    
 }
 
 - (NSUInteger)supportedInterfaceOrientations {
@@ -124,6 +137,8 @@
         
     };
     
+    [self.myGame addObserver:self forKeyPath:@"hasWinner" options:NSKeyValueObservingOptionNew context:nil];
+    
     
 }
 - (void) stopButtonsObservation {
@@ -141,6 +156,7 @@
         
         
     };
+    [self.myGame removeObserver:self forKeyPath:@"hasWinner"];
     
 }
 
@@ -186,8 +202,38 @@
     }
 }
 
+- (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if (buttonIndex == 1)
+    {
+        [self restart];
+    }
+}
+
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)value context:(void *)context  {
+    
+    
+    if ([object isKindOfClass:[Game class]] && [keyPath isEqualToString:@"hasWinner"]) {
+        //perform here final game code
+        if ([self.myGame hasWinner]) {
+            NSString* score=[NSString stringWithFormat:@"%d", self.myGame.finalScore];
+            [self saveStatsWinner:self.myGame.winner withLoser: self.myGame.loser  andScore:score andDate:self.myGame.date];
+            if (self.gameMode==1) {
+                [self victoryCount];
+            }
+            
+            
+            NSString* message=[NSString stringWithFormat:@"%@ won! %@ points!\nRestart?", self.myGame.winner,score];
+            //Create UIAlertView alert
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game Over" message: message delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
+            [alert show];
+
+
+        }
+    
+    }
     
     
     if ([object isKindOfClass:[Container class]]) {
@@ -204,9 +250,26 @@
             if (seeds>5) {
                 seeds=6;
             }
+            
+            
+            //prepare for animation
             NSString *path=[self.themeUrl stringByAppendingString:[NSString stringWithFormat:@"%d.png", seeds]];
             UIImage *image = [UIImage imageNamed:path];
             [button setBackgroundImage:image forState:UIControlStateNormal];
+            //Animations go here
+//            [UIView animateWithDuration:animationTime
+//                             animations:^{
+//                                 self.hand.center=button.center;
+//                             }
+//             
+//                             completion:^(BOOL finished){
+//                                 if (finished) {
+//                                     // Do your method here after your animation.
+//
+//                                 }
+//                             }];
+//                    [UIView commitAnimations];
+
             
             [self.view setNeedsDisplay];
 
@@ -230,14 +293,6 @@
     [self stopButtonsObservation];
     [audioPlayer stop];
     [audioPlayer setCurrentTime:0];
-    if ([self.myGame hasWinner]) {
-        NSString* score=[NSString stringWithFormat:@"%d", self.myGame.finalScore];
-        [self saveStatsWinner:self.myGame.winner withLoser: self.myGame.loser  andScore:score andDate:self.myGame.date];
-        if (self.gameMode==1) {
-            [self victoryCount];
-        }
-        
-    }
     
 }
 - (void) victoryCount {
@@ -263,6 +318,9 @@
 
 
 - (IBAction)pressBowl:(id)sender {
+    UIButton* button=sender;
+    
+    
     //play sounds
     BOOL sound=[self.defaults boolForKey:@"sounds"];
     if (sound) {
@@ -277,6 +335,12 @@
         [audioPlayerTouch play];
     }
     //here goes animation
+    self.hand.center=CGPointMake(button.center.x, 400.0f) ;
+    [UIView animateWithDuration:animationTime animations:^{
+        self.hand.center=button.center;
+    }];
+    
+    
     
     
     [self deactivateButtons];

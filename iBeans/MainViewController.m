@@ -20,6 +20,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     [self loadTheme];
     // Do any additional setup after loading the view.
     
@@ -80,10 +81,7 @@
         GameViewController *gvc = dest;
         
         UIView *button= sender;
-        gvc.gameMode=[button tag];
-        [button setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:1]];
-        
-        
+        gvc.gameMode=[[NSNumber numberWithLong:[button tag]] integerValue];
         [audioPlayer stop];
         NSURL *url = [NSURL fileURLWithPath:[[NSBundle mainBundle]
                                              pathForResource:@"button"
@@ -93,9 +91,27 @@
         [audioPlayer prepareToPlay];
         if (sound) {
             [audioPlayer play];
-            sleep(2);
-
+            
         }
+        [button setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:1]];
+        [self.view setNeedsDisplay];
+
+        
+        [UIView animateWithDuration:1 animations: ^{
+            
+            
+        } completion:^(BOOL finished) {
+            if (finished)
+            {
+                
+            }
+            
+        } ];
+
+        
+        
+        
+
         
         
 
