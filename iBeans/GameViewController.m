@@ -245,9 +245,11 @@
             NSNumber* y=[restPosition[previousRound] objectForKey:@"y"];
             animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithLong:0], @"round": [NSNumber numberWithInt:self.myGame.round]};
             [animationData addObject:animationItem];
-            
+
             
             //Move hand to opponent side
+            timing=animationTime*counter;
+            time=[NSNumber numberWithFloat:timing];
             x=[restPosition[round] objectForKey:@"x"];
             y=[restPosition[round] objectForKey:@"y"];
             animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithLong:0], @"round": [NSNumber numberWithInt:self.myGame.round]};
@@ -259,8 +261,8 @@
             //Return hand to rest
             float timing=animationTime*counter;
             NSNumber* time=[NSNumber numberWithFloat:timing];
-            NSNumber* x=[restPosition[round] objectForKey:@"x"];
-            NSNumber* y=[restPosition[round] objectForKey:@"y"];
+            NSNumber* x=[restPosition[previousRound] objectForKey:@"x"];
+            NSNumber* y=[restPosition[previousRound] objectForKey:@"y"];
             animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithLong:0], @"round": [NSNumber numberWithInt:round]};
             [animationData addObject:animationItem];
             counter=counter+1;
@@ -268,7 +270,7 @@
         }
 
 
-
+        previousRound=round;
         
         
         
@@ -503,7 +505,7 @@
 - (void) playNextAnimation {
     long tag= [[[animationData objectAtIndex:animationCounter] objectForKey:@"tag"] longValue];
     long round= [[[animationData objectAtIndex:animationCounter] objectForKey:@"round"] longValue];
-    
+    BOOL skip=1;
     thePath = CGPathCreateMutable();
     CGPathMoveToPoint(thePath, NULL, self.hand.center.x, self.hand.center.y);
     CGPathAddLineToPoint(thePath, NULL,
@@ -515,14 +517,27 @@
     theAnimation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
     theAnimation.path=thePath;
     if (animationCounter) {
-        theAnimation.duration=([[[animationData objectAtIndex:animationCounter] objectForKey:@"time"] floatValue]-
-                               [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"time"] floatValue]);
-                               
+        
+        if (round==[[[animationData objectAtIndex:animationCounter-1] objectForKey:@"round"] integerValue] && tag==0)
+        {
+            self.hand.center=CGPointMake([[restPosition[round] objectForKey:@"x"] floatValue],
+                                         [[restPosition[round] objectForKey:@"y"] floatValue]);
+            skip=0;
+            
+        } else {
+                    theAnimation.duration=
+            ([[[animationData objectAtIndex:animationCounter] objectForKey:@"time"] floatValue]-
+             [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"time"] floatValue]);
+        }
     }
     else {
-        theAnimation.duration=animationTime;}
+        theAnimation.duration=animationTime;
+        
+    }
     
+    if (skip) {
     [self.hand.layer addAnimation:theAnimation forKey:@"position"];
+    }
     
     self.hand.center=CGPointMake([[[animationData objectAtIndex:animationCounter] objectForKey:@"x"] floatValue],
                                  [[[animationData objectAtIndex:animationCounter] objectForKey:@"y"] floatValue]);
