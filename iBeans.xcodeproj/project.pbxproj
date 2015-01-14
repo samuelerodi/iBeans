@@ -38,8 +38,9 @@
 		22779F1D1A61A144001D9E66 /* piranha_5.png in Resources */ = {isa = PBXBuildFile; fileRef = 22779F151A61A144001D9E66 /* piranha_5.png */; };
 		22779F1E1A61A144001D9E66 /* piranha_6.png in Resources */ = {isa = PBXBuildFile; fileRef = 22779F161A61A144001D9E66 /* piranha_6.png */; };
 		22779F1F1A61A144001D9E66 /* piranha_background.png in Resources */ = {isa = PBXBuildFile; fileRef = 22779F171A61A144001D9E66 /* piranha_background.png */; };
-		227E6E211A6574A8000BFC91 /* hand_open.png in Resources */ = {isa = PBXBuildFile; fileRef = 227E6E201A6574A8000BFC91 /* hand_open.png */; };
 		22821E011A5DB93D0068FF06 /* OptionsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22821E001A5DB93D0068FF06 /* OptionsViewController.m */; };
+		22B7F9DD1A65EE3B00A6485D /* hand_0.png in Resources */ = {isa = PBXBuildFile; fileRef = 22B7F9DB1A65EE3B00A6485D /* hand_0.png */; };
+		22B7F9DE1A65EE3B00A6485D /* hand_1.png in Resources */ = {isa = PBXBuildFile; fileRef = 22B7F9DC1A65EE3B00A6485D /* hand_1.png */; };
 		22C171CD1A643EF400C6EE7D /* settings.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C171CB1A643EF400C6EE7D /* settings.png */; };
 		22C171CE1A643EF400C6EE7D /* home.png in Resources */ = {isa = PBXBuildFile; fileRef = 22C171CC1A643EF400C6EE7D /* home.png */; };
 		22C171D11A6447AF00C6EE7D /* ChildSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 22C171D01A6447AF00C6EE7D /* ChildSettingsViewController.m */; };
@@ -105,9 +106,10 @@
 		22779F151A61A144001D9E66 /* piranha_5.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = piranha_5.png; sourceTree = "<group>"; };
 		22779F161A61A144001D9E66 /* piranha_6.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = piranha_6.png; sourceTree = "<group>"; };
 		22779F171A61A144001D9E66 /* piranha_background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = piranha_background.png; sourceTree = "<group>"; };
-		227E6E201A6574A8000BFC91 /* hand_open.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hand_open.png; sourceTree = "<group>"; };
 		22821DFF1A5DB93D0068FF06 /* OptionsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptionsViewController.h; sourceTree = "<group>"; };
 		22821E001A5DB93D0068FF06 /* OptionsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OptionsViewController.m; sourceTree = "<group>"; };
+		22B7F9DB1A65EE3B00A6485D /* hand_0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hand_0.png; sourceTree = "<group>"; };
+		22B7F9DC1A65EE3B00A6485D /* hand_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hand_1.png; sourceTree = "<group>"; };
 		22C171CB1A643EF400C6EE7D /* settings.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings.png; sourceTree = "<group>"; };
 		22C171CC1A643EF400C6EE7D /* home.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = home.png; sourceTree = "<group>"; };
 		22C171CF1A6447AF00C6EE7D /* ChildSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChildSettingsViewController.h; sourceTree = "<group>"; };
@@ -178,7 +180,8 @@
 		22490BED1A45E7A500D02D8A /* img */ = {
 			isa = PBXGroup;
 			children = (
-				227E6E201A6574A8000BFC91 /* hand_open.png */,
+				22B7F9DB1A65EE3B00A6485D /* hand_0.png */,
+				22B7F9DC1A65EE3B00A6485D /* hand_1.png */,
 				22C171CB1A643EF400C6EE7D /* settings.png */,
 				22C171CC1A643EF400C6EE7D /* home.png */,
 				22779ED91A617BB7001D9E66 /* app_background.png */,
@@ -449,7 +452,6 @@
 				22779F181A61A144001D9E66 /* piranha_0.png in Resources */,
 				22779F191A61A144001D9E66 /* piranha_1.png in Resources */,
 				22779F081A619A92001D9E66 /* worms_1.png in Resources */,
-				227E6E211A6574A8000BFC91 /* hand_open.png in Resources */,
 				22779EE41A617DA8001D9E66 /* button.png in Resources */,
 				22779F1B1A61A144001D9E66 /* piranha_3.png in Resources */,
 				2219B9A41A6410DF00978CDF /* touch.mp3 in Resources */,
@@ -457,7 +459,9 @@
 				22490BF21A45F07500D02D8A /* Settings.bundle in Resources */,
 				22E6009C1A63E729008CA89A /* pause.mp3 in Resources */,
 				22779F021A619A92001D9E66 /* beans_3.png in Resources */,
+				22B7F9DD1A65EE3B00A6485D /* hand_0.png in Resources */,
 				22779F041A619A92001D9E66 /* beans_5.png in Resources */,
+				22B7F9DE1A65EE3B00A6485D /* hand_1.png in Resources */,
 				B948D70C1A22A993002EB9D5 /* LaunchScreen.xib in Resources */,
 				22E6009D1A63E729008CA89A /* piranha_background.mp3 in Resources */,
 				22779F1C1A61A144001D9E66 /* piranha_4.png in Resources */,

@@ -24,7 +24,7 @@
 
 - (id) initGameWithMode: (int) mode;
 - (int) checkWinner;
-- (void) changeRound;
+- (void) changeRound: (BOOL) flag;
 - (void) gameController: (int) flag;
 - (int) setGameSituation: (int[]) seedsPosition andSize: (int) arraySize;
 - (void) printGameSituation;

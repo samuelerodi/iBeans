@@ -20,7 +20,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
     [self loadTheme];
     // Do any additional setup after loading the view.
     
@@ -40,6 +39,8 @@
     [audioPlayer prepareToPlay];
     [audioPlayer setNumberOfLoops:-1];//Infinite
     [audioPlayer setVolume:0.5];
+    [audioPlayer setDelegate:self];
+    
     if (sound) {
         
 
@@ -66,9 +67,17 @@
     [super viewWillAppear:animated];
 
 }
+- (void) redrawGraphics
+{
 
+    sleep(3);
 
+}
 
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    
+}
 
 #pragma mark - Navigation
 
@@ -93,24 +102,23 @@
             [audioPlayer play];
             
         }
+
+        
         [button setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:1]];
         [self.view setNeedsDisplay];
+        
+        
+        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+            
+            //Your code goes in here
 
+            //CGRect myFrame = [button frame];
+            //[button drawRect:myFrame];
+            [NSThread sleepForTimeInterval:1.0f];
+        }];
         
-        [UIView animateWithDuration:1 animations: ^{
-            
-            
-        } completion:^(BOOL finished) {
-            if (finished)
-            {
-                
-            }
-            
-        } ];
-
-        
-        
-        
+        //[self.view performSelectorOnMainThread:@selector() withObject:nil waitUntilDone:YES];
+        //[self performSelector:@selector(redrawGraphics) withObject:nil afterDelay:0 ];
 
         
         

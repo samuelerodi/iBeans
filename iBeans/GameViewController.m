@@ -138,7 +138,7 @@
     };
     
     [self.myGame addObserver:self forKeyPath:@"hasWinner" options:NSKeyValueObservingOptionNew context:nil];
-    
+    [self.myGame addObserver:self forKeyPath:@"round" options:NSKeyValueObservingOptionNew context:nil];
     
 }
 - (void) stopButtonsObservation {
@@ -157,7 +157,7 @@
         
     };
     [self.myGame removeObserver:self forKeyPath:@"hasWinner"];
-    
+    [self.myGame removeObserver:self forKeyPath:@"round"];
 }
 
 - (void) deactivateButtons {
@@ -204,7 +204,6 @@
 
 - (void) alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
-    
     if (buttonIndex == 1)
     {
         [self restart];
@@ -213,6 +212,30 @@
 
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)value context:(void *)context  {
+    
+    if ([object isKindOfClass:[Game class]] && [keyPath isEqualToString:@"round"]) {
+        
+        NSString *path=[NSString stringWithFormat:@"hand_%d.png", self.myGame.round];
+        UIImage *image = [UIImage imageNamed:path];
+        [self.hand setImage:image];
+        if (self.myGame.round) {
+//            [UIView animateWithDuration:animationTime delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+//                self.hand.center=CGPointMake(285.0f,-80.0f );
+//                
+//            } completion:^(BOOL finished){}];
+            
+        } else {
+            
+//            [UIView animateWithDuration:animationTime delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState animations:^{
+//                self.hand.center=CGPointMake(285.0f,410.0f );
+//            } completion:^(BOOL finished){}];
+            
+        }
+        
+        
+        return;
+    }
+    
     
     
     if ([object isKindOfClass:[Game class]] && [keyPath isEqualToString:@"hasWinner"]) {
@@ -229,8 +252,7 @@
             //Create UIAlertView alert
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game Over" message: message delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
             [alert show];
-
-
+            return;
         }
     
     }
@@ -256,7 +278,7 @@
             NSString *path=[self.themeUrl stringByAppendingString:[NSString stringWithFormat:@"%d.png", seeds]];
             UIImage *image = [UIImage imageNamed:path];
             [button setBackgroundImage:image forState:UIControlStateNormal];
-            //Animations go here
+//            //Animations go here
 //            [UIView animateWithDuration:animationTime
 //                             animations:^{
 //                                 self.hand.center=button.center;
@@ -265,15 +287,25 @@
 //                             completion:^(BOOL finished){
 //                                 if (finished) {
 //                                     // Do your method here after your animation.
-//
+//                                     
+//                                     [self.view setNeedsDisplay];
+//                                     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+//                                         
+//                                         //Your code goes in here
+//                                         
+//                                         //CGRect myFrame = [button frame];
+//                                         //[button drawRect:myFrame];
+//                                         [NSThread sleepForTimeInterval:animationTime];
+//                                     }];
+//                                     
 //                                 }
 //                             }];
 //                    [UIView commitAnimations];
 
             
-            [self.view setNeedsDisplay];
 
-            
+
+            return;
         }
     }
     
@@ -335,11 +367,23 @@
         [audioPlayerTouch play];
     }
     //here goes animation
-    self.hand.center=CGPointMake(button.center.x, 400.0f) ;
+    self.hand.center=CGPointMake(button.center.x, 400.0f);
+    
+
+    
     [UIView animateWithDuration:animationTime animations:^{
         self.hand.center=button.center;
-    }];
     
+    } completion:^(BOOL finished){}];
+
+//    [UIView animateWithDuration:animationTime animations:^{
+//        self.hand.center=button.center;
+//    }];
+    [self.view setNeedsDisplay];
+    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+
+        [NSThread sleepForTimeInterval:1.0f];
+    }];
     
     
     

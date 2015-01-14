@@ -319,7 +319,7 @@
                                     <segue destination="MAw-dC-qeb" kind="embed" id="b7P-cS-uJO"/>
                                 </connections>
                             </containerView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand_open.png" id="p9d-Oe-fgL">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="hand_0.png" id="p9d-Oe-fgL">
                                 <rect key="frame" x="113" y="219" width="79" height="63"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
@@ -647,7 +647,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1Xa-TT-3mR">
-                                <rect key="frame" x="192" y="518" width="112" height="30"/>
+                                <rect key="frame" x="191.9999997956412" y="518" width="112" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.94193892045454541" green="0.26849543436559792" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Reset Records">
@@ -846,7 +846,7 @@
     <resources>
         <image name="app_background.png" width="780" height="1500"/>
         <image name="button.png" width="72" height="72"/>
-        <image name="hand_open.png" width="282" height="299"/>
+        <image name="hand_0.png" width="282" height="299"/>
         <image name="home.png" width="512" height="512"/>
         <image name="settings.png" width="512" height="512"/>
     </resources>

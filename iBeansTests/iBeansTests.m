@@ -188,11 +188,11 @@
     XCTAssertNil([game winner], "winner not set");
     
     [game setRound:1];
-    [game changeRound];
+    [game changeRound:true];
     XCTAssert([game round]==0, "round correctly changed");
     
     [game setRound:5];
-    [game changeRound];
+    [game changeRound:true];
     XCTAssert([game round]==0, "round exception correctly handled");
     
     

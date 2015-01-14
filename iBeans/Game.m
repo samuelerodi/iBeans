@@ -12,9 +12,21 @@
 
 @implementation Game
 
-- (void) changeRound {
-    self.round++;
-    self.round=self.round % 2;
+- (void) changeRound: (BOOL) flag {
+    if (!flag) {
+        self.round=self.round;
+    }
+    else {
+        
+        if (self.round==0) {
+            self.round=1;
+        } else if (self.round==1) {
+            self.round=0;
+        }
+        else
+        {NSLog(@"fatal error with round! Not recognized round integer");
+        }
+    }
 };
 
 - (int) checkWinner {
@@ -108,9 +120,10 @@
     win=[self checkWinner];
     if (!win){
         if (flag) {
-            [self changeRound];
+            [self changeRound:true];
         }
         else {
+            [self changeRound:false];
             printf("great! it's still your turn!\n\n");
         };
         
@@ -142,9 +155,10 @@
                 win=[self checkWinner];
                 if (!win){
                     if (flag) {
-                        [self changeRound];
+                        [self changeRound:true];
                     }
                     else {
+                        [self changeRound:false];
                         printf("sorry... still computer's turn!\n\n");
                     };
                 } else  {
