@@ -10,7 +10,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import "OptionsViewController.h"
 
-@interface MainViewController : UIViewController <AVAudioPlayerDelegate>
+@interface MainViewController : UIViewController
 {
     
     AVAudioPlayer *audioPlayer;

@@ -67,17 +67,7 @@
     [super viewWillAppear:animated];
 
 }
-- (void) redrawGraphics
-{
 
-    sleep(3);
-
-}
-
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
-{
-    
-}
 
 #pragma mark - Navigation
 
@@ -98,24 +88,28 @@
         NSError *error;
         audioPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:&error];
         [audioPlayer prepareToPlay];
-        if (sound) {
-            [audioPlayer play];
-            
-        }
-
         
         [button setBackgroundColor:[UIColor colorWithRed:1 green:0 blue:0 alpha:1]];
         [self.view setNeedsDisplay];
         
-        
-        [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+        if (sound) {
+            [audioPlayer play];
             
-            //Your code goes in here
+            [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+                
+                //Your code goes in here
+                
+                //CGRect myFrame = [button frame];
+                //[button drawRect:myFrame];
+                [NSThread sleepForTimeInterval:1.0f];
+            }];
+        }
 
-            //CGRect myFrame = [button frame];
-            //[button drawRect:myFrame];
-            [NSThread sleepForTimeInterval:1.0f];
-        }];
+        
+
+        
+        
+
         
         //[self.view performSelectorOnMainThread:@selector() withObject:nil waitUntilDone:YES];
         //[self performSelector:@selector(redrawGraphics) withObject:nil afterDelay:0 ];

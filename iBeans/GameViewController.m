@@ -15,6 +15,14 @@
 @interface GameViewController ()
 {
     float animationTime;
+    NSArray* restPosition;
+    int counter;
+    int animationCounter;
+    NSMutableArray *animationData;
+    NSDictionary *animationItem;
+    CGMutablePathRef thePath;
+    UIAlertView *alert;
+    int previousRound;
 }
 @property (weak, nonatomic) IBOutlet UIImageView *hand;
 @end
@@ -26,14 +34,22 @@
     
     //Init view Item
     [self.containerView setHidden:true];
-    //move hand away
-    self.hand.center=CGPointMake(0.0f, 400.0f);
+
+
     
+    //Define han rest Position on Screen
+    NSDictionary* pl2=@{@"x": [NSNumber numberWithFloat:self.view.frame.size.height/2] ,
+                        @"y": [NSNumber numberWithFloat:0.0f]};
+    NSDictionary* pl1=@{@"x": [NSNumber numberWithFloat:self.view.frame.size.height/2] ,
+                        @"y": [NSNumber numberWithFloat:self.view.frame.size.width]};
+    restPosition=[[NSArray alloc] initWithObjects: pl1, pl2, nil];
+
     [self loadTheme];
     [self startGame];
     
     // Do any additional setup after loading the view, typically from a nib.
 }
+
 
 - (void) loadTheme {
     self.defaults = [NSUserDefaults standardUserDefaults];
@@ -81,14 +97,18 @@
 }
 
 - (void) viewDidAppear:(BOOL)animated   {
+        //move hand away
+    self.hand.center=CGPointMake([[restPosition[0] objectForKey:@"x"] floatValue],
+                                 [[restPosition[0] objectForKey:@"y"] floatValue]);
 }
 
 - (void)startGame{
     self.myGame=[[Game alloc] initGameWithMode:self.gameMode];
     
+    alert=nil;
     [self deactivateButtons];
     [self.myGame gameController: 1];
-    
+    previousRound=self.myGame.round;
     self.buttonCount=[[self.myGame.players[0] containers] count]+ [[self.myGame.players[1] containers] count];
     
     
@@ -215,22 +235,41 @@
     
     if ([object isKindOfClass:[Game class]] && [keyPath isEqualToString:@"round"]) {
         
-        NSString *path=[NSString stringWithFormat:@"hand_%d.png", self.myGame.round];
-        UIImage *image = [UIImage imageNamed:path];
-        [self.hand setImage:image];
-        if (self.myGame.round) {
-//            [UIView animateWithDuration:animationTime delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-//                self.hand.center=CGPointMake(285.0f,-80.0f );
-//                
-//            } completion:^(BOOL finished){}];
+        int round=self.myGame.round;
+        
+        if (previousRound!=round) {
+            //Return hand to rest
+            float timing=animationTime*counter;
+            NSNumber* time=[NSNumber numberWithFloat:timing];
+            NSNumber* x=[restPosition[previousRound] objectForKey:@"x"];
+            NSNumber* y=[restPosition[previousRound] objectForKey:@"y"];
+            animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithLong:0], @"round": [NSNumber numberWithInt:self.myGame.round]};
+            [animationData addObject:animationItem];
+            
+            
+            //Move hand to opponent side
+            x=[restPosition[round] objectForKey:@"x"];
+            y=[restPosition[round] objectForKey:@"y"];
+            animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithLong:0], @"round": [NSNumber numberWithInt:self.myGame.round]};
+            [animationData addObject:animationItem];
+            counter=counter+1;
+            
             
         } else {
-            
-//            [UIView animateWithDuration:animationTime delay:0.0f options:UIViewAnimationOptionBeginFromCurrentState animations:^{
-//                self.hand.center=CGPointMake(285.0f,410.0f );
-//            } completion:^(BOOL finished){}];
+            //Return hand to rest
+            float timing=animationTime*counter;
+            NSNumber* time=[NSNumber numberWithFloat:timing];
+            NSNumber* x=[restPosition[round] objectForKey:@"x"];
+            NSNumber* y=[restPosition[round] objectForKey:@"y"];
+            animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithLong:0], @"round": [NSNumber numberWithInt:round]};
+            [animationData addObject:animationItem];
+            counter=counter+1;
             
         }
+
+
+
+        
         
         
         return;
@@ -250,8 +289,8 @@
             
             NSString* message=[NSString stringWithFormat:@"%@ won! %@ points!\nRestart?", self.myGame.winner,score];
             //Create UIAlertView alert
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Game Over" message: message delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
-            [alert show];
+            alert = [[UIAlertView alloc] initWithTitle:@"Game Over" message: message delegate:self cancelButtonTitle:@"NO" otherButtonTitles:@"YES", nil];
+            
             return;
         }
     
@@ -266,42 +305,19 @@
             int seeds=container.numOfSeeds;
             
             UIButton *button=[self.view viewWithTag: pos];
-            NSString *title=[NSString stringWithFormat:@"%d", seeds];
-            [button setTitle:title forState:UIControlStateNormal];
-
-            if (seeds>5) {
-                seeds=6;
-            }
             
             
-            //prepare for animation
-            NSString *path=[self.themeUrl stringByAppendingString:[NSString stringWithFormat:@"%d.png", seeds]];
-            UIImage *image = [UIImage imageNamed:path];
-            [button setBackgroundImage:image forState:UIControlStateNormal];
-//            //Animations go here
-//            [UIView animateWithDuration:animationTime
-//                             animations:^{
-//                                 self.hand.center=button.center;
-//                             }
-//             
-//                             completion:^(BOOL finished){
-//                                 if (finished) {
-//                                     // Do your method here after your animation.
-//                                     
-//                                     [self.view setNeedsDisplay];
-//                                     [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-//                                         
-//                                         //Your code goes in here
-//                                         
-//                                         //CGRect myFrame = [button frame];
-//                                         //[button drawRect:myFrame];
-//                                         [NSThread sleepForTimeInterval:animationTime];
-//                                     }];
-//                                     
-//                                 }
-//                             }];
-//                    [UIView commitAnimations];
-
+            //Prepare things for animation
+            //Add Object to render for animation
+            float timing=animationTime*counter;
+            NSNumber* time=[NSNumber numberWithFloat:timing];
+            NSNumber* x=[NSNumber numberWithFloat:button.center.x];
+            NSNumber* y=[NSNumber numberWithFloat:button.center.y];
+            animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithLong:[button tag]],
+                            @"round": [NSNumber numberWithInt:self.myGame.round],
+                            @"seeds": [NSNumber numberWithInt:seeds]};
+            [animationData addObject:animationItem];
+            counter=counter+1;
             
 
 
@@ -311,6 +327,13 @@
     
     
 }
+
+
+
+
+
+
+
 
 - (IBAction)settingsButtonPressed:(UIButton *)sender {
     [self.containerView setHidden:false];
@@ -350,6 +373,8 @@
 
 
 - (IBAction)pressBowl:(id)sender {
+        [self deactivateButtons];
+        [self.view setNeedsDisplay];
     UIButton* button=sender;
     
     
@@ -366,28 +391,45 @@
         [audioPlayerTouch prepareToPlay];
         [audioPlayerTouch play];
     }
-    //here goes animation
-    self.hand.center=CGPointMake(button.center.x, 400.0f);
+    
+    //Prepare for animation
+    animationData=[[NSMutableArray alloc] init];
+
+    
+    //Build the path for animation
+    counter=1;
+    
+    //Bring hand in position
+    self.hand.center=CGPointMake([[restPosition[self.myGame.round] objectForKey:@"x"] floatValue],
+                                 [[restPosition[self.myGame.round] objectForKey:@"y"] floatValue]);
+    
+    
+    //Add Object to render for animation
+    
+    //Move to first pressed bowl
+    float timing=animationTime*counter;
+    NSNumber* time=[NSNumber numberWithFloat:timing];
+    NSNumber* x=[NSNumber numberWithFloat:button.center.x];
+    NSNumber* y=[NSNumber numberWithFloat:button.center.y];
+    animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithLong:[button tag]],
+                    @"round": [NSNumber numberWithInt:self.myGame.round],
+                    @"seeds": [NSNumber numberWithInt: 0]};
+    [animationData addObject:animationItem];
+
+    
+    
     
 
     
-    [UIView animateWithDuration:animationTime animations:^{
-        self.hand.center=button.center;
-    
-    } completion:^(BOOL finished){}];
-
-//    [UIView animateWithDuration:animationTime animations:^{
-//        self.hand.center=button.center;
+//    [self.view setNeedsDisplay];
+//    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+//
+//        [NSThread sleepForTimeInterval:1.0f];
 //    }];
-    [self.view setNeedsDisplay];
-    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
+    
+    
+    
 
-        [NSThread sleepForTimeInterval:1.0f];
-    }];
-    
-    
-    
-    [self deactivateButtons];
     int flag;
     long pos;
     pos=[sender tag];
@@ -399,9 +441,140 @@
         [self.myGame gameController:(flag)];
         
     };
-    [self activateButtons];
+    
+    
+    [self playAnimation];
+    
+
     
 }
+
+
+
+
+
+
+
+
+
+- (void) playAnimation {
+    
+//    //Return hand in rest position
+    float timing=animationTime*counter;
+//    NSNumber* time=[NSNumber numberWithFloat:timing];
+//    NSNumber* x=[restPosition[!self.myGame.round] objectForKey:@"x"];
+//    NSNumber* y=[restPosition[!self.myGame.round] objectForKey:@"y"];
+//    animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithInt:0],
+//                    @"round": [NSNumber numberWithInt:self.myGame.round]};
+//    [animationData addObject:animationItem];
+    
+    
+    
+    animationCounter=0;
+    float lag=animationTime/5;
+    
+    for (int i=0; i<[animationData count]; i++) {
+        if (i) {
+            timing=[[[animationData objectAtIndex:i-1] objectForKey:@"time"] floatValue]+lag*i;
+        }
+        else timing=0;
+        
+        [self performSelector:@selector(playNextAnimation) withObject:nil
+                   afterDelay:timing];
+    }
+    
+    CAKeyframeAnimation * theAnimation;
+    
+    // Create the animation object, specifying the position property as the key path.
+    theAnimation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
+    theAnimation.path=thePath;
+    theAnimation.duration=animationTime*counter;
+        [self.hand.layer addAnimation:theAnimation forKey:@"position"];
+}
+
+
+
+
+
+
+
+
+
+- (void) playNextAnimation {
+    long tag= [[[animationData objectAtIndex:animationCounter] objectForKey:@"tag"] longValue];
+    long round= [[[animationData objectAtIndex:animationCounter] objectForKey:@"round"] longValue];
+    
+    thePath = CGPathCreateMutable();
+    CGPathMoveToPoint(thePath, NULL, self.hand.center.x, self.hand.center.y);
+    CGPathAddLineToPoint(thePath, NULL,
+                         [[[animationData objectAtIndex:animationCounter] objectForKey:@"x"] floatValue],
+                         [[[animationData objectAtIndex:animationCounter] objectForKey:@"y"] floatValue]);
+    
+    CAKeyframeAnimation * theAnimation;
+    // Create the animation object, specifying the position property as the key path.
+    theAnimation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
+    theAnimation.path=thePath;
+    if (animationCounter) {
+        theAnimation.duration=([[[animationData objectAtIndex:animationCounter] objectForKey:@"time"] floatValue]-
+                               [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"time"] floatValue]);
+                               
+    }
+    else {
+        theAnimation.duration=animationTime;}
+    
+    [self.hand.layer addAnimation:theAnimation forKey:@"position"];
+    
+    self.hand.center=CGPointMake([[[animationData objectAtIndex:animationCounter] objectForKey:@"x"] floatValue],
+                                 [[[animationData objectAtIndex:animationCounter] objectForKey:@"y"] floatValue]);
+    
+    
+    //Change round change Hand
+    NSString *path=[NSString stringWithFormat:@"hand_%ld.png", round];
+    UIImage *image = [UIImage imageNamed:path];
+    [self.hand setImage:image];
+    [self.hand setNeedsDisplay];
+    
+
+
+    if (tag) {
+        
+        //update Button Image and Label if tag is present
+        long seeds=[[[animationData objectAtIndex:animationCounter] objectForKey:@"seeds"] longValue];
+        
+        UIButton *button=[self.view viewWithTag: tag];
+        NSString *title=[NSString stringWithFormat:@"%ld", seeds];
+        [button setTitle:title forState:UIControlStateNormal];
+        
+        if (seeds>5) {
+            seeds=6;
+        }
+        
+        
+        
+        NSString *path=[self.themeUrl stringByAppendingString:[NSString stringWithFormat:@"%ld.png", seeds]];
+        UIImage *image = [UIImage imageNamed:path];
+        [button setBackgroundImage:image forState:UIControlStateNormal];
+        //[button setNeedsDisplay];
+    
+    
+    
+    
+    }
+
+    
+    animationCounter=animationCounter+1;
+    if (animationCounter==[animationData count]) {
+        [self activateButtons];
+        if (alert) {
+            [alert show];
+        }
+        
+    }
+        
+}
+
+
+
 
 - (void) saveStatsWinner: (NSString*) winner withLoser: (NSString*) loser andScore: (NSString*) score andDate: (NSDate*) date {
     
