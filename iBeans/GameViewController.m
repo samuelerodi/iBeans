@@ -24,6 +24,8 @@
     UIAlertView *alert;
     int previousRound;
 }
+@property (weak, nonatomic) IBOutlet UILabel *extraLabel;
+@property (weak, nonatomic) IBOutlet UIButton *playDroneMode;
 @property (weak, nonatomic) IBOutlet UIImageView *hand;
 @end
 
@@ -39,10 +41,11 @@
     
     //Define han rest Position on Screen
     NSDictionary* pl2=@{@"x": [NSNumber numberWithFloat:self.view.frame.size.height/2] ,
-                        @"y": [NSNumber numberWithFloat:0.0f]};
+                        @"y": [NSNumber numberWithFloat:-20.0f]};
     NSDictionary* pl1=@{@"x": [NSNumber numberWithFloat:self.view.frame.size.height/2] ,
-                        @"y": [NSNumber numberWithFloat:self.view.frame.size.width]};
+                        @"y": [NSNumber numberWithFloat:self.view.frame.size.width+20.0]};
     restPosition=[[NSArray alloc] initWithObjects: pl1, pl2, nil];
+    self.extraLabel.center=CGPointMake(-200.0f, self.view.frame.size.height/2);
 
     [self loadTheme];
     [self startGame];
@@ -101,18 +104,38 @@
     self.hand.center=CGPointMake([[restPosition[0] objectForKey:@"x"] floatValue],
                                  [[restPosition[0] objectForKey:@"y"] floatValue]);
 }
+- (IBAction)playDroneMode:(UIButton *)sender {
+        if (self.gameMode==2) {
+            [self.myGame gameController: 1];
+            previousRound=self.myGame.round;
+        [self playAnimation];
+    }
+}
+
 
 - (void)startGame{
     self.myGame=[[Game alloc] initGameWithMode:self.gameMode];
     
     alert=nil;
     [self deactivateButtons];
-    [self.myGame gameController: 1];
-    previousRound=self.myGame.round;
-    self.buttonCount=[[self.myGame.players[0] containers] count]+ [[self.myGame.players[1] containers] count];
+    
+    //Prepare for animation
+    if (self.gameMode==2) {
+        //init Data For Animations
+        animationData=[[NSMutableArray alloc] init];
+        counter=1;
+        
+        //Bring hand in position
+        self.hand.center=CGPointMake([[restPosition[self.myGame.round] objectForKey:@"x"] floatValue],
+                                     [[restPosition[self.myGame.round] objectForKey:@"y"] floatValue]);
+    } else {
+        [self.playDroneMode setHidden:true];
+    }
     
     
-    //Set labels
+    [audioPlayer play];
+    
+        //Set labels
     [self.player1Name setText:[self.myGame.players[0] name]];
     [self.player2Name setText:[self.myGame.players[1] name]];
     self.player1Name.layer.borderColor = [UIColor grayColor].CGColor;
@@ -120,9 +143,18 @@
     self.player2Name.layer.borderColor = [UIColor grayColor].CGColor;
     self.player2Name.layer.borderWidth = 2.0;
     
+
+ 
+    self.buttonCount=[[self.myGame.players[0] containers] count]+ [[self.myGame.players[1] containers] count];
     [self initButtonLabels];
+    if (self.gameMode!=2) {
+        [self.myGame gameController: 1];
+        previousRound=self.myGame.round;
+    }
+
+
+
     [self activateButtons];
-    [audioPlayer play];
     
 }
 
@@ -473,7 +505,7 @@
     
     
     animationCounter=0;
-    float lag=animationTime/5;
+    float lag=animationTime/3;
     
     for (int i=0; i<[animationData count]; i++) {
         if (i) {
@@ -518,10 +550,50 @@
     theAnimation.path=thePath;
     if (animationCounter) {
         
+        
+        //Still your Turn! Notify user with animations
+        if (!tag && ([[[animationData objectAtIndex:animationCounter-1] objectForKey:@"tag"] longValue]-1)%7==6) {
+            NSString* label;
+            if ([[[animationData objectAtIndex:animationCounter-2] objectForKey:@"seeds"] longValue]==0) {
+                
+                int prevRound=[[[animationData objectAtIndex:animationCounter-1] objectForKey:@"round"] longValue];
+                if ([self.myGame.players[prevRound] isKindOfClass:([Computer class])]) {
+                    label= [NSString stringWithFormat:@"Damn! Seeds Taken"];
+                } else if ([self.myGame.players[prevRound] isKindOfClass:([Human class])]) {
+                    label= [NSString stringWithFormat:@"Great! Seeds Captured"];
+                }
+                
+            } else {
+            
+            
+            if ([self.myGame.players[round] isKindOfClass:([Computer class])]) {
+                label= [NSString stringWithFormat:@"Ouch! Still Computer's Turn"];
+            } else if ([self.myGame.players[round] isKindOfClass:([Human class])]) {
+                label= [NSString stringWithFormat:@"Great! Still your Turn"];
+            }}
+            [self.extraLabel setText:label];
+            
+            [UIView animateWithDuration:animationTime
+                             animations:^{
+                                 self.extraLabel.center=
+                                 CGPointMake(self.view.frame.size.width/2,self.view.frame.size.height/2);
+                             }];
+            [UIView animateWithDuration:animationTime delay:animationTime+1 options:UIViewAnimationOptionBeginFromCurrentState
+                             animations:^{
+                                 self.extraLabel.center=
+                                 CGPointMake(self.view.frame.size.width+200.0,self.view.frame.size.height/2);
+                             } completion:^(BOOL finished){
+                                 self.extraLabel.center=CGPointMake(-200.0f,self.view.frame.size.height/2);}];
+            
+        }
+
+
+        //If it's still one's player turn
         if (round==[[[animationData objectAtIndex:animationCounter-1] objectForKey:@"round"] integerValue] && tag==0)
         {
             self.hand.center=CGPointMake([[restPosition[round] objectForKey:@"x"] floatValue],
                                          [[restPosition[round] objectForKey:@"y"] floatValue]);
+            [NSThread sleepForTimeInterval:animationTime/3];
             skip=0;
             
         } else {
@@ -543,37 +615,41 @@
                                  [[[animationData objectAtIndex:animationCounter] objectForKey:@"y"] floatValue]);
     
     
-    //Change round change Hand
-    NSString *path=[NSString stringWithFormat:@"hand_%ld.png", round];
-    UIImage *image = [UIImage imageNamed:path];
-    [self.hand setImage:image];
-    [self.hand setNeedsDisplay];
-    
-
-
-    if (tag) {
+    if (animationCounter) {
+        tag= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"tag"] longValue];
+        round= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"round"] longValue];
         
-        //update Button Image and Label if tag is present
-        long seeds=[[[animationData objectAtIndex:animationCounter] objectForKey:@"seeds"] longValue];
+        //Change round change Hand
+        NSString *path=[NSString stringWithFormat:@"hand_%ld.png", round];
+        UIImage *image = [UIImage imageNamed:path];
+        [self.hand setImage:image];
+        [self.hand setNeedsDisplay];
         
-        UIButton *button=[self.view viewWithTag: tag];
-        NSString *title=[NSString stringWithFormat:@"%ld", seeds];
-        [button setTitle:title forState:UIControlStateNormal];
         
-        if (seeds>5) {
-            seeds=6;
+        
+        if (tag) {
+            
+            //update Button Image and Label if tag is present
+            long seeds=[[[animationData objectAtIndex:animationCounter-1] objectForKey:@"seeds"] longValue];
+            
+            UIButton *button=[self.view viewWithTag: tag];
+            NSString *title=[NSString stringWithFormat:@"%ld", seeds];
+            [button setTitle:title forState:UIControlStateNormal];
+            
+            if (seeds>5) {
+                seeds=6;
+            }
+            
+            
+            
+            NSString *path=[self.themeUrl stringByAppendingString:[NSString stringWithFormat:@"%ld.png", seeds]];
+            UIImage *image = [UIImage imageNamed:path];
+            [button setBackgroundImage:image forState:UIControlStateNormal];
+            //[button setNeedsDisplay];
+            
+            
         }
         
-        
-        
-        NSString *path=[self.themeUrl stringByAppendingString:[NSString stringWithFormat:@"%ld.png", seeds]];
-        UIImage *image = [UIImage imageNamed:path];
-        [button setBackgroundImage:image forState:UIControlStateNormal];
-        //[button setNeedsDisplay];
-    
-    
-    
-    
     }
 
     
@@ -582,6 +658,8 @@
         [self activateButtons];
         if (alert) {
             [alert show];
+            self.hand.center=CGPointMake([[restPosition[round] objectForKey:@"x"] floatValue],
+                                         [[restPosition[round] objectForKey:@"y"] floatValue]);
         }
         
     }
@@ -643,7 +721,7 @@
 
 #pragma mark Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
+{   [self.view.layer removeAllAnimations];
     [self exitGame];
     [audioPlayer stop];
 }
