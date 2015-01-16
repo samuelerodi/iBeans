@@ -11,6 +11,7 @@
 #import "Container.h"
 #import  "Player.h"
 #import "Game.h"
+#import "GameViewController.h"
 
 @interface iBeansTests : XCTestCase
 
@@ -140,6 +141,8 @@
     printf("\nplayer2\n");
     [player2 printPlayerState];
     
+    [player2 setAiLevel:0.5];
+    [player2 aiController];
     
     //Simulate end game
     int collect=0;
@@ -170,6 +173,8 @@
     [player printPlayerState];
     printf("\nplayer2\n");
     [player2 printPlayerState];
+    
+
 }
 
 - (void) testGame {
@@ -228,6 +233,12 @@
     [self measureBlock:^{
         // Put the code you want to measure the time of here.
     }];
+}
+
+- (void) testGameViewController {
+    GameViewController * game=[[GameViewController alloc] init];
+    [game saveStatsWinner:@"io" withLoser:@"tu" andScore:@"24" andDate:[NSDate new]];
+    
 }
 
 @end

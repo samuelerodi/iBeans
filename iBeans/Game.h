@@ -21,6 +21,8 @@
 @property (nonatomic) int finalScore;
 @property (nonatomic) BOOL hasWinner;
 @property (nonatomic,weak) NSUserDefaults *defaults;
+@property (nonatomic) int stillYourTurn;
+@property (nonatomic) int captureSeeds;
 
 - (id) initGameWithMode: (int) mode;
 - (int) checkWinner;

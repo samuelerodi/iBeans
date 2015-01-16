@@ -17,6 +17,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *labelPlayer1;
 @property (weak, nonatomic) IBOutlet UITextField *player1Name;
 @property (weak, nonatomic) IBOutlet UITextField *player2Name;
+@property (weak, nonatomic) NSUserDefaults *defaults;
 @end
 
 @implementation ChildSettingsViewController
@@ -26,10 +27,12 @@
 
 
 - (void)viewDidLoad {
-        [super viewDidLoad];
+    [super viewDidLoad];
+    self.defaults = [NSUserDefaults standardUserDefaults];
     
     self.player1Name.delegate=self;
     self.player2Name.delegate=self;
+    
     // Do any additional setup after loading the view.
 }
 
@@ -51,10 +54,11 @@
             [self.sliderPlayer1 setHidden: true];
             [self.sliderPlayer1 setEnabled:false];
             [self.labelPlayer1 setHidden:true];
-            self.sliderPlayer2.value=0;
+            self.sliderPlayer2.value=[self.parentView.myGame.players[1] aiLevel];
+            break;
         case 2:
-            self.sliderPlayer2.value=0;
-            self.sliderPlayer1.value=0;
+            self.sliderPlayer2.value=[self.parentView.myGame.players[1] aiLevel];
+            self.sliderPlayer1.value=[self.parentView.myGame.players[0] aiLevel];
             break;
     }
     [self refreshPlayerNames];
@@ -90,6 +94,8 @@
     [self.parentView.containerView setHidden: true];
 }
 - (IBAction)changeAILevel:(UISlider*)sender {
+    NSNumber* aiLevel=[NSNumber numberWithDouble:[sender value]];
+    [self.defaults setObject:aiLevel forKey:@"aiLevel"];
     
     switch ([sender tag]) {
         case 50:

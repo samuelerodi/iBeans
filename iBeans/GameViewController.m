@@ -14,7 +14,7 @@
 
 @interface GameViewController ()
 {
-    float animationTime;
+    double animationTime;
     NSArray* restPosition;
     int counter;
     int animationCounter;
@@ -90,7 +90,7 @@
     [self.background setImage:image];
     
     //Set AnimationSpeed
-    animationTime=(1.1-[[self.defaults valueForKey:@"animationSpeed"] floatValue]);
+    animationTime=(0.75-[[self.defaults valueForKey:@"animationSpeed"] floatValue]*0.7);
     
     
 }
@@ -106,6 +106,8 @@
 }
 - (IBAction)playDroneMode:(UIButton *)sender {
         if (self.gameMode==2) {
+            [self.playDroneMode setHidden:true];
+            [self.playDroneMode setEnabled:false];
             [self.myGame gameController: 1];
             previousRound=self.myGame.round;
         [self playAnimation];
@@ -191,7 +193,8 @@
     
     [self.myGame addObserver:self forKeyPath:@"hasWinner" options:NSKeyValueObservingOptionNew context:nil];
     [self.myGame addObserver:self forKeyPath:@"round" options:NSKeyValueObservingOptionNew context:nil];
-    
+    [self.myGame addObserver:self forKeyPath:@"captureSeeds" options:NSKeyValueObservingOptionNew context:nil];
+    [self.myGame addObserver:self forKeyPath:@"stillYourTurn" options:NSKeyValueObservingOptionNew context:nil];
 }
 - (void) stopButtonsObservation {
     UIButton *button;
@@ -210,6 +213,8 @@
     };
     [self.myGame removeObserver:self forKeyPath:@"hasWinner"];
     [self.myGame removeObserver:self forKeyPath:@"round"];
+    [self.myGame removeObserver:self forKeyPath:@"stillYourTurn"];
+    [self.myGame removeObserver:self forKeyPath:@"captureSeeds"];
 }
 
 - (void) deactivateButtons {
@@ -264,6 +269,23 @@
 
 
 - (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)value context:(void *)context  {
+    
+    if ([object isKindOfClass:[Game class]] && [keyPath isEqualToString:@"stillYourTurn"]) {
+        float timing=animationTime*counter;
+        NSNumber* time=[NSNumber numberWithFloat:timing];
+        animationItem=@{@"time": time, @"tag": [NSNumber numberWithInt:30], @"round": [NSNumber numberWithInt:self.myGame.round], @"stillYourTurn":[NSNumber numberWithInt:self.myGame.stillYourTurn]};
+        [animationData addObject:animationItem];
+    
+    }
+    
+    if ([object isKindOfClass:[Game class]] && [keyPath isEqualToString:@"captureSeeds"]) {
+        float timing=animationTime*counter;
+        NSNumber* time=[NSNumber numberWithFloat:timing];
+        animationItem=@{@"time": time, @"tag": [NSNumber numberWithInt:30], @"round": [NSNumber numberWithInt:self.myGame.round], @"captureSeeds":[NSNumber numberWithInt:self.myGame.captureSeeds]};
+        [animationData addObject:animationItem];
+    }
+    
+    
     
     if ([object isKindOfClass:[Game class]] && [keyPath isEqualToString:@"round"]) {
         
@@ -402,6 +424,11 @@
 - (void)restart {
     [self exitGame];
     [self startGame];
+    
+    if (self.gameMode==2) {
+        [self.playDroneMode setHidden:false];
+        [self.playDroneMode setEnabled:true];
+    }
 }
 
 
@@ -537,6 +564,7 @@
 - (void) playNextAnimation {
     long tag= [[[animationData objectAtIndex:animationCounter] objectForKey:@"tag"] longValue];
     long round= [[[animationData objectAtIndex:animationCounter] objectForKey:@"round"] longValue];
+    BOOL skip2=1;
     BOOL skip=1;
     thePath = CGPathCreateMutable();
     CGPathMoveToPoint(thePath, NULL, self.hand.center.x, self.hand.center.y);
@@ -550,27 +578,27 @@
     theAnimation.path=thePath;
     if (animationCounter) {
         
+        long prevTag= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"tag"] longValue];
         
         //Still your Turn! Notify user with animations
-        if (!tag && ([[[animationData objectAtIndex:animationCounter-1] objectForKey:@"tag"] longValue]-1)%7==6) {
+       
+        if ([[[animationData objectAtIndex:animationCounter] objectForKey:@"stillYourTurn"] integerValue] || [[[animationData objectAtIndex:animationCounter] objectForKey:@"captureSeeds"] integerValue]) {
+            int stillYourTurn=[[[animationData objectAtIndex:animationCounter] objectForKey:@"stillYourTurn"] integerValue];
+            int captured=[[[animationData objectAtIndex:animationCounter] objectForKey:@"captureSeeds"] integerValue];
+            skip2=false;
             NSString* label;
-            if ([[[animationData objectAtIndex:animationCounter-2] objectForKey:@"seeds"] longValue]==0) {
-                
-                int prevRound=[[[animationData objectAtIndex:animationCounter-1] objectForKey:@"round"] longValue];
-                if ([self.myGame.players[prevRound] isKindOfClass:([Computer class])]) {
-                    label= [NSString stringWithFormat:@"Damn! Seeds Taken"];
-                } else if ([self.myGame.players[prevRound] isKindOfClass:([Human class])]) {
-                    label= [NSString stringWithFormat:@"Great! Seeds Captured"];
-                }
-                
-            } else {
             
-            
-            if ([self.myGame.players[round] isKindOfClass:([Computer class])]) {
+            if (stillYourTurn==2) {
                 label= [NSString stringWithFormat:@"Ouch! Still Computer's Turn"];
-            } else if ([self.myGame.players[round] isKindOfClass:([Human class])]) {
+            } else if (stillYourTurn==1) {
                 label= [NSString stringWithFormat:@"Great! Still your Turn"];
-            }}
+            }
+            
+            if (captured==2) {
+                label= [NSString stringWithFormat:@"Damn! Seeds Taken"];
+            } else if (captured==1) {
+                label= [NSString stringWithFormat:@"Great! Seeds Captured"];
+            }
             [self.extraLabel setText:label];
             
             [UIView animateWithDuration:animationTime
@@ -578,12 +606,12 @@
                                  self.extraLabel.center=
                                  CGPointMake(self.view.frame.size.width/2,self.view.frame.size.height/2);
                              }];
-            [UIView animateWithDuration:animationTime delay:animationTime+1 options:UIViewAnimationOptionBeginFromCurrentState
+            [UIView animateWithDuration:animationTime delay:animationTime*3 options:UIViewAnimationOptionBeginFromCurrentState
                              animations:^{
                                  self.extraLabel.center=
-                                 CGPointMake(self.view.frame.size.width+200.0,self.view.frame.size.height/2);
+                                 CGPointMake(self.view.frame.size.width+250.0,self.view.frame.size.height/2);
                              } completion:^(BOOL finished){
-                                 self.extraLabel.center=CGPointMake(-200.0f,self.view.frame.size.height/2);}];
+                                 self.extraLabel.center=CGPointMake(-250.0f,self.view.frame.size.height/2);}];
             
         }
 
@@ -607,16 +635,19 @@
         
     }
     
-    if (skip) {
+    if (skip && skip2) {
     [self.hand.layer addAnimation:theAnimation forKey:@"position"];
+        
     }
     
+    if (skip2) {
     self.hand.center=CGPointMake([[[animationData objectAtIndex:animationCounter] objectForKey:@"x"] floatValue],
                                  [[[animationData objectAtIndex:animationCounter] objectForKey:@"y"] floatValue]);
-    
+    }
     
     if (animationCounter) {
-        tag= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"tag"] longValue];
+        
+        long prevTag= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"tag"] longValue];
         round= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"round"] longValue];
         
         //Change round change Hand
@@ -627,12 +658,12 @@
         
         
         
-        if (tag) {
+        if (prevTag && prevTag!=30) {
             
             //update Button Image and Label if tag is present
             long seeds=[[[animationData objectAtIndex:animationCounter-1] objectForKey:@"seeds"] longValue];
             
-            UIButton *button=[self.view viewWithTag: tag];
+            UIButton *button=[self.view viewWithTag: prevTag];
             NSString *title=[NSString stringWithFormat:@"%ld", seeds];
             [button setTitle:title forState:UIControlStateNormal];
             
@@ -657,6 +688,7 @@
     if (animationCounter==[animationData count]) {
         [self activateButtons];
         if (alert) {
+            [self updateButtonLabel];
             [alert show];
             self.hand.center=CGPointMake([[restPosition[round] objectForKey:@"x"] floatValue],
                                          [[restPosition[round] objectForKey:@"y"] floatValue]);
@@ -666,7 +698,28 @@
         
 }
 
+- (void) updateButtonLabel {
+    UIButton *button;
+    NSString *title;
+    int seeds;
+    for (int i=1; i<=self.buttonCount; i++) {
+        button=[self.view viewWithTag: i];
+        seeds=[[self.myGame.players[(i-1)/7] containers][(i-1)%7] numOfSeeds];
+        title=[NSString stringWithFormat:@"%d", seeds];
+        [button setTitle:title forState:UIControlStateNormal];
+        
+        if (seeds>5) {
+            seeds=6;
+        }
+        
+        NSString *path=[self.themeUrl stringByAppendingString:[NSString stringWithFormat:@"%d.png", seeds]];
+        UIImage *image = [UIImage imageNamed:path];
+        [button setBackgroundImage:image forState:UIControlStateNormal];
+    }
+    [self.view setNeedsDisplay];
 
+
+}
 
 
 - (void) saveStatsWinner: (NSString*) winner withLoser: (NSString*) loser andScore: (NSString*) score andDate: (NSDate*) date {
@@ -690,7 +743,7 @@
             BOOL stopCycle=true;
             
             while (i<[stats count] && stopCycle)
-            {
+            {   
                 if ([[[stats objectAtIndex:i] objectForKey:@"score"] integerValue]>[score integerValue]) {
                     i++;
                 }
@@ -700,7 +753,7 @@
             [stats insertObject:result atIndex:i];
         }
         if ([stats count]>maxStats) {
-            [stats removeObjectAtIndex:(maxStats-1)];
+            [stats removeObjectAtIndex:(maxStats)];
         }
     }
 
@@ -721,7 +774,8 @@
 
 #pragma mark Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{   [self.view.layer removeAllAnimations];
+{   alert=nil;
+    [self.view.layer removeAllAnimations];
     [self exitGame];
     [audioPlayer stop];
 }

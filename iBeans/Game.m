@@ -90,7 +90,7 @@
         [self.players[1] setOpponent: self.players[0]];
         
         
-        //Set players name
+        //Set players name and AILevel
         self.defaults = [NSUserDefaults standardUserDefaults];
         if ([self.players[0] isKindOfClass:([Human class])]) {
             NSString *player1 = [self.defaults stringForKey:(@"player1Name")];
@@ -99,6 +99,14 @@
         if ([self.players[1] isKindOfClass:([Human class])]) {
             NSString *player2 = [self.defaults stringForKey:(@"player2Name")];
             [self.players[1] setName:player2];
+        }
+        if ([self.players[0] isKindOfClass:([Computer class])]) {
+            NSNumber *aiLevel1 = [self.defaults objectForKey:(@"aiLevel")];
+            [self.players[0] setAiLevel:[aiLevel1 doubleValue]];
+        }
+        if ([self.players[1] isKindOfClass:([Computer class])]) {
+            NSNumber *aiLevel2 = [self.defaults objectForKey:(@"aiLevel")];
+            [self.players[1] setAiLevel:[aiLevel2 doubleValue]];
         }
         
         
@@ -115,7 +123,17 @@
     //display situation
     [self printGameSituation];
     
-    
+    if ([self.players[self.round] captured]) {
+        if ([self.players[self.round] isKindOfClass:([Human class])]) {
+            self.captureSeeds=1;
+        }
+        else if ([self.players[self.round] isKindOfClass:([Computer class])]){
+            
+            self.captureSeeds=2;
+        }
+    }
+
+
     //Perform basic tasks: check if there is a winner and/or change the round
     win=[self checkWinner];
     if (!win){
@@ -124,6 +142,7 @@
         }
         else {
             [self changeRound:false];
+            self.stillYourTurn=1;
             printf("great! it's still your turn!\n\n");
         };
         
@@ -145,6 +164,16 @@
                 printf("\n\nComputer %i chooses ", ([self round]+1));
                 flag=[self.players[[self round]] aiController];
                 
+                if ([self.players[self.round] captured]) {
+                    if ([self.players[self.round] isKindOfClass:([Human class])]) {
+                        self.captureSeeds=1;
+                    }
+                    else if ([self.players[self.round] isKindOfClass:([Computer class])]){
+                        
+                        self.captureSeeds=2;
+                    }
+                }
+                
                 //display situation
                 [self printGameSituation];
                 
@@ -159,6 +188,7 @@
                     }
                     else {
                         [self changeRound:false];
+                        self.stillYourTurn=2;
                         printf("sorry... still computer's turn!\n\n");
                     };
                 } else  {

@@ -163,11 +163,12 @@
         
         
         printf("capture seeds \n");
+
         
     }
     else
     {NSLog(@"Warning: Can't pick from opponent's tray");};
-    
+
 };
 
 
@@ -175,7 +176,7 @@
 
 - (int) playerController: (long) choice {
     int last;
-    
+    self.captured=false;
     //make the moke
     last=[self move:(choice)];
     
@@ -191,6 +192,7 @@
         //check if it ended up in one's own empty bowl
         else if ([self.containers[last] isKindOfClass:([Bowl class])] && [self.containers[last] numOfSeeds]== 1) {
             [self captureSeeds:(last)];
+            self.captured=true;
         }
     }
     
@@ -209,7 +211,17 @@
     return count;
 };
 
+- (int) getTrayPosition {
+    int pos;
+    
+    pos=[self.containers[NUM_BOWLS] position];
+    return pos;
+};
 
+- (Container *) getContainerAtPosition: (int) pos {
+
+    return self.containers[(pos-1)%(NUM_BOWLS+1)] ;
+};
 
 
 
@@ -254,23 +266,208 @@
 
 
 @implementation Computer
+
 - (int) aiController{
     int flag;
-    int choice;
+    long choice;
     //Implement AI control
+    [self getPossibleMoves];
+    NSArray* sameTurn=[self getSameTurnSeeds];
+    NSArray* captSeeds=[self getCaptureSeeds];
+    NSArray* status=[self getSystemStatus];
+    long aiChoice=0;
     
-    choice=arc4random_uniform(NUM_BOWLS)+1;
+    double test=self.aiLevel;
+    long moves=[self.possibleMoves count];
+    long randing=arc4random_uniform(moves);
+    long randChoice=([[[self.possibleMoves objectAtIndex:randing] objectForKey:@"position"]integerValue])%(NUM_BOWLS+1);
+    
+    srand48(time(0));
+    double levelDice = drand48();
     
     
-    while ((choice<1 || choice>NUM_BOWLS)|| ([self.containers[choice-1] numOfSeeds]==0)){
-        choice=arc4random_uniform(NUM_BOWLS)+1;
-    };
-    printf(" %d\n", choice);
+    //AI decisional core: aiChoice
+    
+
+    if ([status[0] integerValue]>=[status[1] integerValue]) {
+    //Defense Mode: keep your beans as much as you can
+        
+        if ([captSeeds count]) {
+            aiChoice=[[[captSeeds objectAtIndex:0]objectForKey:@"position"]  integerValue];
+        
+        
+        }
+        else {
+            //Take the furthest to the tray if can repeat the turn
+            if ([sameTurn count]) {
+                aiChoice=[[[sameTurn objectAtIndex:0]objectForKey:@"position"]  integerValue];}
+            
+            else {
+                
+                
+                long smallest=32;
+                int pos=0;
+                for (int i=0; i<[self.possibleMoves count]; i++) {
+                    if (smallest>[[[self.possibleMoves objectAtIndex:i] objectForKey:@"seeds"]integerValue])
+                    {
+                        smallest=[[[self.possibleMoves objectAtIndex:i] objectForKey:@"seeds"]integerValue];
+                        pos=i;
+                    }
+                }
+                aiChoice=[[[self.possibleMoves objectAtIndex:pos] objectForKey:@"position"] integerValue];
+            }
+            
+            
+        }
+
+        
+    } else {
+    //Attack Mode: try to steal beans from the opponent
+        if ([captSeeds count]) {
+            
+            //Get the position giving the best win from opponent
+            long biggest=0;
+            int pos=0;
+            for (int i=0; i<[captSeeds count]; i++) {
+                if (biggest<[[[captSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue])
+                {
+                    biggest=[[[captSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue];
+                    pos=i;
+                }
+                
+            }
+            aiChoice=[[[captSeeds objectAtIndex:pos]objectForKey:@"position"]  integerValue];
+        
+        
+        
+        }
+        else {
+            //Take the closest to the tray if possible to repeat the turn
+            if ([sameTurn count]) {
+                aiChoice=[[[sameTurn objectAtIndex:([sameTurn count]-1)]objectForKey:@"position"]  integerValue];
+            
+            
+            
+            } else {
+                //Get the furthest position with the most seeds in it
+                long score=0;
+                long pos=0;
+                long seeds;
+                long position;
+                for (int i=0; i<[self.possibleMoves count]; i++) {
+                    seeds=[[[self.possibleMoves objectAtIndex:i] objectForKey:@"seeds"]integerValue];
+                    position=[[[self.possibleMoves objectAtIndex:i] objectForKey:@"position"]integerValue];
+                    
+                    if (score<seeds+position)
+                    {   pos=i;
+                        score=seeds+position;
+                    }
+                }
+                aiChoice=[[[self.possibleMoves objectAtIndex:pos]objectForKey:@"position"]  integerValue];
+                
+                
+            }
+        }
+    }
     
     
-    flag=[self playerController:(choice-1)];
+    
+    
+    if (levelDice>self.aiLevel) {
+        choice=randChoice;
+    } else {
+        choice=aiChoice;
+    }
+    
+    printf(" %ld\n", choice);
+    
+    
+    flag=[self playerController:(choice)];
     
     //flag for round change
     return flag;
 };
+
+- (NSMutableArray *)getSystemStatus {
+    int count=0;
+    NSMutableArray* status=[[NSMutableArray alloc] init];
+    
+    for (int i=0; i<=NUM_BOWLS; i++) {
+        count=count+[self.containers[i] numOfSeeds];
+    }
+    [status addObject:[NSNumber numberWithInt:count]];
+    
+    count=0;
+    for (int i=0; i<=NUM_BOWLS; i++) {
+        count=count+[self.opponent.containers[i] numOfSeeds];
+    }
+    
+    [status addObject:[NSNumber numberWithInt:count]];
+    
+    return status;
+}
+
+
+- (NSMutableArray*) getSameTurnSeeds {
+    NSMutableArray* arrayForSameTurn=[[NSMutableArray alloc] init];
+    NSDictionary* itemForArray;
+    
+    for (int l=0; l<[self.possibleMoves count]; l++) {
+        int i= [[[self.possibleMoves objectAtIndex:l] objectForKey:@"position"]integerValue];
+        
+        if (([self.containers[i] position]+[self.containers[i] numOfSeeds])==[self getTrayPosition]) {
+            itemForArray=@{@"position": [NSNumber numberWithInt:i] ,
+                           @"seeds" : [NSNumber numberWithInt:[self.containers[i] numOfSeeds]]};
+            
+            [arrayForSameTurn addObject:itemForArray];
+        }
+    }
+    return arrayForSameTurn;
+};
+
+- (NSMutableArray*) getCaptureSeeds {
+    NSMutableArray* arrayForCaptureSeeds=[[NSMutableArray alloc] init];
+    NSDictionary* itemForArray;
+    
+    for (int l=0; l<[self.possibleMoves count]; l++) {
+        
+        int i= [[[self.possibleMoves objectAtIndex:l] objectForKey:@"position"]integerValue];
+        int pos=[self.containers[i] position]+[self.containers[i] numOfSeeds] ;
+        if ([self getContainerAtPosition:pos]==0) {
+            itemForArray=@{@"position": [NSNumber numberWithInt:i] ,
+                           @"seeds" : [NSNumber numberWithInt:[self.containers[i] numOfSeeds]],
+                           @"seedsToWin": [NSNumber numberWithInt:[[self.opponent getContainerAtPosition:(((NUM_BOWLS+1)*2) - pos)] numOfSeeds]] };
+            
+            [arrayForCaptureSeeds addObject:itemForArray];
+        }
+    }
+    return arrayForCaptureSeeds;
+};
+
+
+- (void) getPossibleMoves {
+    if (!self.possibleMoves) {
+        self.possibleMoves=[[NSMutableArray alloc] init];
+    }
+    
+    
+    NSMutableArray* arrayPossibleMoves=[[NSMutableArray alloc] init];
+    NSDictionary* itemForArray;
+    
+    for (int i=0; i<NUM_BOWLS; i++) {
+        
+        if ([self.containers[i] numOfSeeds]!=0) {
+            itemForArray=@{@"position": [NSNumber numberWithInt:i] ,
+                           @"seeds" : [NSNumber numberWithInt:[self.containers[i] numOfSeeds]]};
+            
+            [arrayPossibleMoves addObject:itemForArray];
+        }
+    }
+    self.possibleMoves=arrayPossibleMoves;
+};
+
+
 @end
+
+
+

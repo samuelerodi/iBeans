@@ -32,5 +32,6 @@
 - (IBAction)pressBowl:(id)sender;
 - (void)restart;
 - (void) refreshNames;
+- (void) saveStatsWinner: (NSString*) winner withLoser: (NSString*) loser andScore: (NSString*) score andDate: (NSDate*) date;
 
 @end
