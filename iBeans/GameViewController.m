@@ -130,6 +130,8 @@
         //Bring hand in position
         self.hand.center=CGPointMake([[restPosition[self.myGame.round] objectForKey:@"x"] floatValue],
                                      [[restPosition[self.myGame.round] objectForKey:@"y"] floatValue]);
+
+        
     } else {
         [self.playDroneMode setHidden:true];
     }
@@ -154,7 +156,10 @@
         previousRound=self.myGame.round;
     }
 
-
+    NSString *path=[NSString stringWithFormat:@"hand_%d.png", self.myGame.round];
+    UIImage *image = [UIImage imageNamed:path];
+    [self.hand setImage:image];
+    [self.hand setNeedsDisplay];
 
     [self activateButtons];
     
@@ -273,7 +278,9 @@
     if ([object isKindOfClass:[Game class]] && [keyPath isEqualToString:@"stillYourTurn"]) {
         float timing=animationTime*counter;
         NSNumber* time=[NSNumber numberWithFloat:timing];
-        animationItem=@{@"time": time, @"tag": [NSNumber numberWithInt:30], @"round": [NSNumber numberWithInt:self.myGame.round], @"stillYourTurn":[NSNumber numberWithInt:self.myGame.stillYourTurn]};
+        NSNumber* x=[restPosition[previousRound] objectForKey:@"x"];
+        NSNumber* y=[restPosition[previousRound] objectForKey:@"y"];
+        animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithInt:30], @"round": [NSNumber numberWithInt:self.myGame.round], @"stillYourTurn":[NSNumber numberWithInt:self.myGame.stillYourTurn]};
         [animationData addObject:animationItem];
     
     }
@@ -281,7 +288,9 @@
     if ([object isKindOfClass:[Game class]] && [keyPath isEqualToString:@"captureSeeds"]) {
         float timing=animationTime*counter;
         NSNumber* time=[NSNumber numberWithFloat:timing];
-        animationItem=@{@"time": time, @"tag": [NSNumber numberWithInt:30], @"round": [NSNumber numberWithInt:self.myGame.round], @"captureSeeds":[NSNumber numberWithInt:self.myGame.captureSeeds]};
+        NSNumber* x=[restPosition[previousRound] objectForKey:@"x"];
+        NSNumber* y=[restPosition[previousRound] objectForKey:@"y"];
+        animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithInt:30], @"round": [NSNumber numberWithInt:self.myGame.round], @"captureSeeds":[NSNumber numberWithInt:self.myGame.captureSeeds]};
         [animationData addObject:animationItem];
     }
     
@@ -300,14 +309,7 @@
             animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithLong:0], @"round": [NSNumber numberWithInt:self.myGame.round]};
             [animationData addObject:animationItem];
 
-            
-            //Move hand to opponent side
-            timing=animationTime*counter;
-            time=[NSNumber numberWithFloat:timing];
-            x=[restPosition[round] objectForKey:@"x"];
-            y=[restPosition[round] objectForKey:@"y"];
-            animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithLong:0], @"round": [NSNumber numberWithInt:self.myGame.round]};
-            [animationData addObject:animationItem];
+
             counter=counter+1;
             
             
@@ -460,36 +462,6 @@
     //Build the path for animation
     counter=1;
     
-    //Bring hand in position
-    self.hand.center=CGPointMake([[restPosition[self.myGame.round] objectForKey:@"x"] floatValue],
-                                 [[restPosition[self.myGame.round] objectForKey:@"y"] floatValue]);
-    
-    
-    //Add Object to render for animation
-    
-    //Move to first pressed bowl
-    float timing=animationTime*counter;
-    NSNumber* time=[NSNumber numberWithFloat:timing];
-    NSNumber* x=[NSNumber numberWithFloat:button.center.x];
-    NSNumber* y=[NSNumber numberWithFloat:button.center.y];
-    animationItem=@{@"time": time, @"x": x, @"y": y, @"tag": [NSNumber numberWithLong:[button tag]],
-                    @"round": [NSNumber numberWithInt:self.myGame.round],
-                    @"seeds": [NSNumber numberWithInt: 0]};
-    [animationData addObject:animationItem];
-
-    
-    
-    
-
-    
-//    [self.view setNeedsDisplay];
-//    [[NSOperationQueue mainQueue] addOperationWithBlock:^ {
-//
-//        [NSThread sleepForTimeInterval:1.0f];
-//    }];
-    
-    
-    
 
     int flag;
     long pos;
@@ -544,13 +516,6 @@
                    afterDelay:timing];
     }
     
-    CAKeyframeAnimation * theAnimation;
-    
-    // Create the animation object, specifying the position property as the key path.
-    theAnimation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
-    theAnimation.path=thePath;
-    theAnimation.duration=animationTime*counter;
-        [self.hand.layer addAnimation:theAnimation forKey:@"position"];
 }
 
 
@@ -564,28 +529,24 @@
 - (void) playNextAnimation {
     long tag= [[[animationData objectAtIndex:animationCounter] objectForKey:@"tag"] longValue];
     long round= [[[animationData objectAtIndex:animationCounter] objectForKey:@"round"] longValue];
-    BOOL skip2=1;
-    BOOL skip=1;
+    long prevTag;
+    long prevRound;
+
     thePath = CGPathCreateMutable();
     CGPathMoveToPoint(thePath, NULL, self.hand.center.x, self.hand.center.y);
     CGPathAddLineToPoint(thePath, NULL,
                          [[[animationData objectAtIndex:animationCounter] objectForKey:@"x"] floatValue],
                          [[[animationData objectAtIndex:animationCounter] objectForKey:@"y"] floatValue]);
     
-    CAKeyframeAnimation * theAnimation;
-    // Create the animation object, specifying the position property as the key path.
-    theAnimation=[CAKeyframeAnimation animationWithKeyPath:@"position"];
-    theAnimation.path=thePath;
+
     if (animationCounter) {
-        
-        long prevTag= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"tag"] longValue];
         
         //Still your Turn! Notify user with animations
        
         if ([[[animationData objectAtIndex:animationCounter] objectForKey:@"stillYourTurn"] integerValue] || [[[animationData objectAtIndex:animationCounter] objectForKey:@"captureSeeds"] integerValue]) {
             int stillYourTurn=[[[animationData objectAtIndex:animationCounter] objectForKey:@"stillYourTurn"] integerValue];
             int captured=[[[animationData objectAtIndex:animationCounter] objectForKey:@"captureSeeds"] integerValue];
-            skip2=false;
+
             NSString* label;
             
             if (stillYourTurn==2) {
@@ -614,87 +575,82 @@
                                  self.extraLabel.center=CGPointMake(-250.0f,self.view.frame.size.height/2);}];
             
         }
+   
+       prevTag= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"tag"] longValue];
+       prevRound= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"round"] integerValue];
+    
+    }
+    
+    float x;
+    float y;
+   
+        x= [[[animationData objectAtIndex:animationCounter] objectForKey:@"x"] floatValue];
+        y= [[[animationData objectAtIndex:animationCounter] objectForKey:@"y"] floatValue];
+        
 
-
-        //If it's still one's player turn
-        if (round==[[[animationData objectAtIndex:animationCounter-1] objectForKey:@"round"] integerValue] && tag==0)
-        {
-            self.hand.center=CGPointMake([[restPosition[round] objectForKey:@"x"] floatValue],
-                                         [[restPosition[round] objectForKey:@"y"] floatValue]);
-            [NSThread sleepForTimeInterval:animationTime/3];
-            skip=0;
-            
-        } else {
-                    theAnimation.duration=
-            ([[[animationData objectAtIndex:animationCounter] objectForKey:@"time"] floatValue]-
-             [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"time"] floatValue]);
-        }
-    }
-    else {
-        theAnimation.duration=animationTime;
-        
-    }
+        [UIView animateWithDuration:animationTime delay:0 options:UIViewAnimationOptionBeginFromCurrentState
+                         animations:^{
+                             
+ 
+                                 
+                             self.hand.center=CGPointMake(x, y);
+                             
+                         } completion:^(BOOL finished){
+                             
+                             long tag= [[[animationData objectAtIndex:animationCounter] objectForKey:@"tag"] longValue];
+                             long round= [[[animationData objectAtIndex:animationCounter] objectForKey:@"round"] longValue];
+                             
+                             
+                             self.hand.center=CGPointMake(x, y);
+                             
+                             
+                             
+                             if (tag && tag!=30) {
+                                 //update Button Image and Label if tag is present
+                                 long seeds=[[[animationData objectAtIndex:animationCounter] objectForKey:@"seeds"] longValue];
+                                 
+                                 UIButton *button=[self.view viewWithTag: tag];
+                                 NSString *title=[NSString stringWithFormat:@"%ld", seeds];
+                                 [button setTitle:title forState:UIControlStateNormal];
+                                 
+                                 if (seeds>5) {
+                                     seeds=6;
+                                 }
+                                 
+                                 
+                                 
+                                 NSString *path=[self.themeUrl stringByAppendingString:[NSString stringWithFormat:@"%ld.png", seeds]];
+                                 UIImage *image = [UIImage imageNamed:path];
+                                 [button setBackgroundImage:image forState:UIControlStateNormal];
+                             }
+                             
+                             if (animationCounter) {
+                                long prevRound= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"round"] integerValue];
+                             }
+                             
+                             if (tag==0 && round!=prevRound) {
+                                 self.hand.center=CGPointMake([[restPosition[round] objectForKey:@"x"] floatValue],
+                                                              [[restPosition[round] objectForKey:@"y"] floatValue]);
+                                 //Change round change Hand
+                                 NSString *path=[NSString stringWithFormat:@"hand_%ld.png", round];
+                                 UIImage *image = [UIImage imageNamed:path];
+                                 [self.hand setImage:image];
+                                 [self.hand setNeedsDisplay];
+                             }
+                             
+                             animationCounter=animationCounter+1;
+                             if (animationCounter==[animationData count]) {
+                                 [self activateButtons];
+                                 if (alert) {
+                                     [self updateButtonLabel];
+                                     [alert show];
+                                     self.hand.center=CGPointMake([[restPosition[round] objectForKey:@"x"] floatValue],
+                                                                  [[restPosition[round] objectForKey:@"y"] floatValue]);
+                                 }
+                                 
+                             }
+                         }];
     
-    if (skip && skip2) {
-    [self.hand.layer addAnimation:theAnimation forKey:@"position"];
-        
-    }
-    
-    if (skip2) {
-    self.hand.center=CGPointMake([[[animationData objectAtIndex:animationCounter] objectForKey:@"x"] floatValue],
-                                 [[[animationData objectAtIndex:animationCounter] objectForKey:@"y"] floatValue]);
-    }
-    
-    if (animationCounter) {
-        
-        long prevTag= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"tag"] longValue];
-        round= [[[animationData objectAtIndex:animationCounter-1] objectForKey:@"round"] longValue];
-        
-        //Change round change Hand
-        NSString *path=[NSString stringWithFormat:@"hand_%ld.png", round];
-        UIImage *image = [UIImage imageNamed:path];
-        [self.hand setImage:image];
-        [self.hand setNeedsDisplay];
-        
-        
-        
-        if (prevTag && prevTag!=30) {
-            
-            //update Button Image and Label if tag is present
-            long seeds=[[[animationData objectAtIndex:animationCounter-1] objectForKey:@"seeds"] longValue];
-            
-            UIButton *button=[self.view viewWithTag: prevTag];
-            NSString *title=[NSString stringWithFormat:@"%ld", seeds];
-            [button setTitle:title forState:UIControlStateNormal];
-            
-            if (seeds>5) {
-                seeds=6;
-            }
-            
-            
-            
-            NSString *path=[self.themeUrl stringByAppendingString:[NSString stringWithFormat:@"%ld.png", seeds]];
-            UIImage *image = [UIImage imageNamed:path];
-            [button setBackgroundImage:image forState:UIControlStateNormal];
-            //[button setNeedsDisplay];
-            
-            
-        }
-        
-    }
-
-    
-    animationCounter=animationCounter+1;
-    if (animationCounter==[animationData count]) {
-        [self activateButtons];
-        if (alert) {
-            [self updateButtonLabel];
-            [alert show];
-            self.hand.center=CGPointMake([[restPosition[round] objectForKey:@"x"] floatValue],
-                                         [[restPosition[round] objectForKey:@"y"] floatValue]);
-        }
-        
-    }
         
 }
 

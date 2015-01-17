@@ -678,7 +678,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="1Xa-TT-3mR">
-                                <rect key="frame" x="191.99999886483729" y="518" width="112" height="30"/>
+                                <rect key="frame" x="191.99999860073308" y="518" width="112" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
                                 <color key="backgroundColor" red="0.94193892045454541" green="0.26849543436559792" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <state key="normal" title="Reset Records">

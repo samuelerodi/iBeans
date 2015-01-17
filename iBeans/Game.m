@@ -141,8 +141,9 @@
             [self changeRound:true];
         }
         else {
-            [self changeRound:false];
             self.stillYourTurn=1;
+            [self changeRound:false];
+            
             printf("great! it's still your turn!\n\n");
         };
         
@@ -187,8 +188,9 @@
                         [self changeRound:true];
                     }
                     else {
-                        [self changeRound:false];
                         self.stillYourTurn=2;
+                        [self changeRound:false];
+                        
                         printf("sorry... still computer's turn!\n\n");
                     };
                 } else  {

@@ -55,10 +55,19 @@
     NSMutableArray *newStats=[[NSMutableArray alloc] initWithCapacity:0];
     [self.defaults setObject:newStats forKey:@"stats"];
     NSMutableArray *victory=[[NSMutableArray alloc] initWithCapacity:0];
-    [self.defaults setObject:victory forKey:@"stats"];
+    [self.defaults setObject:victory forKey:@"victory"];
     [self.defaults synchronize];
     [self loadStats];
     [self.statsTable reloadData];
+    victory=[self.defaults mutableArrayValueForKey:@"victory"];
+    if ([victory count]>0) {
+        self.humanLabel.text=[NSString stringWithFormat:@"%ld", (long)[victory[0] integerValue]];
+        self.computerLabel.text=[NSString stringWithFormat:@"%ld", (long)[victory[1] integerValue]];
+    }
+    else {
+        self.humanLabel.text=@"0";
+        self.computerLabel.text=@"0";
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
