@@ -9,6 +9,7 @@
 #import "Container.h"
 #import <UIKit/UIKit.h>
 #import <AVFoundation/AVFoundation.h>
+#import "MainViewController.h"
 
 
 @interface GameViewController : UIViewController

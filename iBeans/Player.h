@@ -14,7 +14,7 @@
 @property (nonatomic, strong) NSMutableArray *containers;
 @property (nonatomic, weak) Player *opponent;
 @property (nonatomic) BOOL captured;
-
+@property (nonatomic, strong) NSMutableArray* possibleMoves;
 
 
 - (id) initWithPlayerNumber: (int) playerNum;
@@ -29,6 +29,12 @@
 //player controller returns 1 if change round is necessary, or 0 if it is not
 - (int) playerController: (long) choice;
 
+//AI methods
+- (void) getPossibleMoves;
+- (NSMutableArray*) getCaptureSeeds;
+- (NSMutableArray*) getSameTurnSeeds;
+- (NSMutableArray *)getSystemStatus;
+
 
 @end
 
@@ -38,6 +44,6 @@
 
 @interface Computer : Player
 @property (nonatomic) double aiLevel;
-@property (nonatomic, strong) NSMutableArray* possibleMoves;
+
 - (int) aiController;
 @end

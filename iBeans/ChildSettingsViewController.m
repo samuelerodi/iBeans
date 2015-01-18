@@ -66,6 +66,8 @@
     
 }
 
+
+
 - (void) refreshPlayerNames {
     
     NSString *player1=[self.parentView.myGame.players[0] name];
@@ -95,12 +97,13 @@
 }
 - (IBAction)changeAILevel:(UISlider*)sender {
     NSNumber* aiLevel=[NSNumber numberWithDouble:[sender value]];
-    [self.defaults setObject:aiLevel forKey:@"aiLevel"];
+
     
     switch ([sender tag]) {
         case 50:
             if ([self.parentView.myGame.players[0] isKindOfClass:([Computer class])]) {
                 [self.parentView.myGame.players[0] setAiLevel:([sender value])];
+                [self.defaults setObject:aiLevel forKey:@"aiLevel1"];
             }
             else
             { NSLog(@"Human is not a Computer! Can't assign AI Level");}
@@ -109,6 +112,7 @@
         case 51:
             if ([self.parentView.myGame.players[1] isKindOfClass:([Computer class])]) {
                 [self.parentView.myGame.players[1] setAiLevel:([sender value])];
+                [self.defaults setObject:aiLevel forKey:@"aiLevel2"];
             }
             else
             { NSLog(@"Human is not a Computer! Can't assign AI Level");}

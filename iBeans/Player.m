@@ -233,166 +233,14 @@
     }
 };
 
-@end
 
-
-
-
-
-@implementation Human
-- (int) humanController: (long) choice {
-    //Get a valid input from user
-    
-    int flag;
-    
-    
-    
-    printf("\nHuman %s chooses bowl %li: \n", [[self name] UTF8String], (long)choice);
-    
-    if ((choice<1 || choice>NUM_BOWLS)|| ([self.containers[choice-1] numOfSeeds]==0)){
-        printf("\nINVALID BOWL SELECTED. Choose a different bowl. ");
-        return -1;
-    };
-    
-    
-    flag=[self playerController:(choice-1)];
-    
-    //flag for round change (1 - change) (0 - don't change)
-    return flag;
-};
-@end
-
-
-
-
-@implementation Computer
-
-- (int) aiController{
-    int flag;
-    long choice;
-    //Implement AI control
-    [self getPossibleMoves];
-    NSArray* sameTurn=[self getSameTurnSeeds];
-    NSArray* captSeeds=[self getCaptureSeeds];
-    NSArray* status=[self getSystemStatus];
-    long aiChoice=0;
-    
-    double test=self.aiLevel;
-    long moves=[self.possibleMoves count];
-    long randing=arc4random_uniform(moves);
-    long randChoice=([[[self.possibleMoves objectAtIndex:randing] objectForKey:@"position"]integerValue])%(NUM_BOWLS+1);
-    
-    srand48(time(0));
-    double levelDice = drand48();
-    
-    
-    //AI decisional core: aiChoice
-    
-
-    if ([status[0] integerValue]>=[status[1] integerValue]) {
-    //Defense Mode: keep your beans as much as you can
-        
-        if ([captSeeds count]) {
-            aiChoice=[[[captSeeds objectAtIndex:0]objectForKey:@"position"]  integerValue];
-        
-        
-        }
-        else {
-            //Take the furthest to the tray if can repeat the turn
-            if ([sameTurn count]) {
-                aiChoice=[[[sameTurn objectAtIndex:0]objectForKey:@"position"]  integerValue];}
-            
-            else {
-                
-                
-                long smallest=32;
-                int pos=0;
-                for (int i=0; i<[self.possibleMoves count]; i++) {
-                    if (smallest>[[[self.possibleMoves objectAtIndex:i] objectForKey:@"seeds"]integerValue])
-                    {
-                        smallest=[[[self.possibleMoves objectAtIndex:i] objectForKey:@"seeds"]integerValue];
-                        pos=i;
-                    }
-                }
-                aiChoice=[[[self.possibleMoves objectAtIndex:pos] objectForKey:@"position"] integerValue];
-            }
-            
-            
-        }
-
-        
-    } else {
-    //Attack Mode: try to steal beans from the opponent
-        if ([captSeeds count]) {
-            
-            //Get the position giving the best win from opponent
-            long biggest=0;
-            int pos=0;
-            for (int i=0; i<[captSeeds count]; i++) {
-                if (biggest<[[[captSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue])
-                {
-                    biggest=[[[captSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue];
-                    pos=i;
-                }
-                
-            }
-            aiChoice=[[[captSeeds objectAtIndex:pos]objectForKey:@"position"]  integerValue];
-        
-        
-        
-        }
-        else {
-            //Take the closest to the tray if possible to repeat the turn
-            if ([sameTurn count]) {
-                aiChoice=[[[sameTurn objectAtIndex:([sameTurn count]-1)]objectForKey:@"position"]  integerValue];
-            
-            
-            
-            } else {
-                //Get the furthest position with the most seeds in it
-                long score=0;
-                long pos=0;
-                long seeds;
-                long position;
-                for (int i=0; i<[self.possibleMoves count]; i++) {
-                    seeds=[[[self.possibleMoves objectAtIndex:i] objectForKey:@"seeds"]integerValue];
-                    position=[[[self.possibleMoves objectAtIndex:i] objectForKey:@"position"]integerValue];
-                    
-                    if (score<seeds+position)
-                    {   pos=i;
-                        score=seeds+position;
-                    }
-                }
-                aiChoice=[[[self.possibleMoves objectAtIndex:pos]objectForKey:@"position"]  integerValue];
-                
-                
-            }
-        }
-    }
-    
-    
-    
-    
-    if (levelDice>self.aiLevel) {
-        choice=randChoice;
-    } else {
-        choice=aiChoice;
-    }
-    
-    printf(" %ld\n", choice);
-    
-    
-    flag=[self playerController:(choice)];
-    
-    //flag for round change
-    return flag;
-};
+//Methods Used For Artificial Intelligence
 
 - (NSMutableArray *)getSystemStatus {
     int count=0;
     NSMutableArray* status=[[NSMutableArray alloc] init];
     
-    for (int i=0; i<=NUM_BOWLS; i++) {
+    for (int i=0; i<NUM_BOWLS; i++) {
         count=count+[self.containers[i] numOfSeeds];
     }
     [status addObject:[NSNumber numberWithInt:count]];
@@ -428,17 +276,21 @@
 - (NSMutableArray*) getCaptureSeeds {
     NSMutableArray* arrayForCaptureSeeds=[[NSMutableArray alloc] init];
     NSDictionary* itemForArray;
+    [self getPossibleMoves];
     
     for (int l=0; l<[self.possibleMoves count]; l++) {
         
         int i= [[[self.possibleMoves objectAtIndex:l] objectForKey:@"position"]integerValue];
         int pos=[self.containers[i] position]+[self.containers[i] numOfSeeds] ;
-        if ([self getContainerAtPosition:pos]==0) {
-            itemForArray=@{@"position": [NSNumber numberWithInt:i] ,
-                           @"seeds" : [NSNumber numberWithInt:[self.containers[i] numOfSeeds]],
-                           @"seedsToWin": [NSNumber numberWithInt:[[self.opponent getContainerAtPosition:(((NUM_BOWLS+1)*2) - pos)] numOfSeeds]] };
-            
-            [arrayForCaptureSeeds addObject:itemForArray];
+        
+        if (pos <[self.containers[NUM_BOWLS] position]) {
+            if ([[self getContainerAtPosition:pos] numOfSeeds]==0) {
+                itemForArray=@{@"position": [NSNumber numberWithInt:i] ,
+                               @"seeds" : [NSNumber numberWithInt:[self.containers[i] numOfSeeds]],
+                               @"seedsToWin": [NSNumber numberWithInt:[[self.opponent getContainerAtPosition:(((NUM_BOWLS+1)*2) - pos)] numOfSeeds]] };
+                
+                [arrayForCaptureSeeds addObject:itemForArray];
+            }
         }
     }
     return arrayForCaptureSeeds;
@@ -465,6 +317,276 @@
     }
     self.possibleMoves=arrayPossibleMoves;
 };
+
+
+@end
+
+
+
+
+
+@implementation Human
+- (int) humanController: (long) choice {
+    //Get a valid input from user
+    
+    int flag;
+    
+    
+    
+    printf("\nHuman %s chooses bowl %li: \n", [[self name] UTF8String], (long)choice);
+    
+    if ((choice<1 || choice>NUM_BOWLS)|| ([self.containers[choice-1] numOfSeeds]==0)){
+        printf("\nINVALID BOWL SELECTED. Choose a different bowl. ");
+        return -1;
+    };
+    
+    
+    flag=[self playerController:(choice-1)];
+    
+    //flag for round change (1 - change) (0 - don't change)
+    return flag;
+};
+
+
+
+@end
+
+
+
+
+@implementation Computer
+
+- (int) aiController{
+    int flag;
+    int chosen=0;
+    long choice;
+    //Implement AI control
+    [self getPossibleMoves];
+    NSArray* sameTurn=[self getSameTurnSeeds];
+    NSArray* captSeeds=[self getCaptureSeeds];
+    NSArray* opponentCaptSeeds=[self.opponent getCaptureSeeds];
+    NSArray* status=[self getSystemStatus];
+    long aiChoice=0;
+    
+    double test=self.aiLevel;
+    long moves=[self.possibleMoves count];
+    long randing=arc4random_uniform(moves);
+    long randChoice=([[[self.possibleMoves objectAtIndex:randing] objectForKey:@"position"]integerValue])%(NUM_BOWLS+1);
+    
+    srand48(time(0));
+    double levelDice = drand48();
+    
+    
+    //AI decisional core: aiChoice
+    
+
+    if ([status[0] integerValue]>=[status[1] integerValue]) {
+    
+        
+        //Defense Mode: keep your beans as much as you can
+        
+        if (chosen==0)  {
+            //Take the closest to the tray if possible to repeat the turn
+            if ([sameTurn count]) {
+                aiChoice=[[[sameTurn objectAtIndex:([sameTurn count]-1)]objectForKey:@"position"]  integerValue];
+                chosen=1;
+                
+                
+            }
+        }
+        
+
+        
+        if (chosen==0) {
+            if ([captSeeds count]) {
+                
+                
+                //Get the position giving the best win FROM opponent
+                long biggest=0;
+                int pos=-1;
+                for (int i=0; i<[captSeeds count]; i++) {
+                    if (biggest<=[[[captSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue] &&
+                        [[[captSeeds objectAtIndex:i]objectForKey:@"seedsToWin"]  integerValue]>=1)
+                    {
+                        biggest=[[[captSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue];
+                        pos=i;
+                    }
+                    
+                }
+                if (pos!=-1) {
+                    aiChoice=[[[captSeeds objectAtIndex:pos]objectForKey:@"position"]  integerValue];
+                    chosen=1;
+                }
+                
+                
+            }
+        }
+
+        if (chosen==0) {
+            //Beware of Opponent Capture seeds
+            if ([opponentCaptSeeds count]) {
+                //Get the position giving the best win TO opponent
+                long biggest=0;
+                int pos=-1;
+                for (int i=0; i<[opponentCaptSeeds count]; i++) {
+                    if (biggest<=[[[opponentCaptSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue] &&
+                        [[[opponentCaptSeeds objectAtIndex:i]objectForKey:@"seedsToWin"]  integerValue]>4)
+                    {
+                        biggest=[[[opponentCaptSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue];
+                        pos=[[[opponentCaptSeeds objectAtIndex:i]objectForKey:@"position"]  integerValue]+
+                        [[[opponentCaptSeeds objectAtIndex:i]objectForKey:@"seeds"]  integerValue];
+                    }
+                    
+                }
+                if (pos!=-1) {
+                    aiChoice=(NUM_BOWLS-1)-pos;
+                    chosen=1;
+                }
+            }
+        }
+        
+        if (chosen==0)  {
+            
+            //Get the bowl with the highest score, closer to the tray with more seeds
+            long score=0;
+            long pos=0;
+            long seeds;
+            long position;
+            for (int i=0; i<[self.possibleMoves count]; i++) {
+                seeds=[[[self.possibleMoves objectAtIndex:i] objectForKey:@"seeds"]integerValue];
+                position=[[[self.possibleMoves objectAtIndex:i] objectForKey:@"position"]integerValue];
+                
+                if (score<=seeds+position)
+                {   pos=i;
+                    score=seeds+position;
+                }
+            }
+            aiChoice=[[[self.possibleMoves objectAtIndex:pos]objectForKey:@"position"]  integerValue];
+            chosen=1;
+        }
+            
+            
+        
+    } else {
+    
+        
+        
+        
+        
+        
+        
+        
+        //Attack Mode: try to steal beans from the opponent       
+        if (chosen==0)  {
+            //Repeat the turn if worth it
+            if ([sameTurn count]) {
+                
+                if ([[[sameTurn objectAtIndex:([sameTurn count]-1)]objectForKey:@"position"]  integerValue]==
+                    [[[self.possibleMoves objectAtIndex:([self.possibleMoves count]-1)] objectForKey:@"position"]integerValue]) {
+                    aiChoice=[[[sameTurn objectAtIndex:([sameTurn count]-1)]objectForKey:@"position"]  integerValue];
+                    chosen=1;
+                }
+            }
+        }
+
+        
+        if (chosen==0) {
+            if ([captSeeds count]) {
+                
+                
+                //Get the position giving the best win FROM opponent
+                long biggest=0;
+                int pos=-1;
+                for (int i=0; i<[captSeeds count]; i++) {
+                    if (biggest<=[[[captSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue] &&
+                        [[[captSeeds objectAtIndex:i]objectForKey:@"seedsToWin"]  integerValue]>1)
+                    {
+                        biggest=[[[captSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue];
+                        pos=i;
+                    }
+                    
+                }
+                if (pos!=-1) {
+                    aiChoice=[[[captSeeds objectAtIndex:pos]objectForKey:@"position"]  integerValue];
+                    chosen=1;
+                }
+                
+                
+            }
+        }
+        
+        if (chosen==0) {
+            //Beware of Opponent Capture seeds
+            if ([opponentCaptSeeds count]) {
+                //Get the position giving the best win TO opponent
+                long biggest=0;
+                int pos=-1;
+                for (int i=0; i<[opponentCaptSeeds count]; i++) {
+                    if (biggest<=[[[opponentCaptSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue] &&
+                        [[[opponentCaptSeeds objectAtIndex:i]objectForKey:@"seedsToWin"]  integerValue]>3)
+                    {
+                        biggest=[[[opponentCaptSeeds objectAtIndex:i] objectForKey:@"seedsToWin"]integerValue];
+                        pos=[[[opponentCaptSeeds objectAtIndex:i]objectForKey:@"position"]  integerValue]+
+                        [[[opponentCaptSeeds objectAtIndex:i]objectForKey:@"seeds"]  integerValue];
+                    }
+                    
+                }
+                if (pos!=-1) {
+                    aiChoice=(NUM_BOWLS-1)-pos;
+                    chosen=1;
+                }
+            }
+        }
+        
+        
+
+        
+
+        
+
+
+        
+        if (chosen==0) {
+            //Get the bowl with the highest score, closer to the tray with more seeds
+            long score=0;
+            long pos=0;
+            long seeds;
+            long position;
+            for (int i=0; i<[self.possibleMoves count]; i++) {
+                seeds=[[[self.possibleMoves objectAtIndex:i] objectForKey:@"seeds"]integerValue];
+                position=[[[self.possibleMoves objectAtIndex:i] objectForKey:@"position"]integerValue];
+                
+                if (score<seeds+position)
+                {   pos=i;
+                    score=seeds+position;
+                }
+            }
+            aiChoice=[[[self.possibleMoves objectAtIndex:pos]objectForKey:@"position"]  integerValue];
+            chosen=1;
+            
+        }
+    }
+    
+    
+    
+    
+    
+    if (levelDice>self.aiLevel) {
+        choice=randChoice;
+    } else {
+        choice=aiChoice;
+    }
+    
+    printf(" %ld\n", choice);
+    
+    
+    flag=[self playerController:(choice)];
+    
+    //flag for round change
+    return flag;
+};
+
+
 
 
 @end

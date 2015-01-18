@@ -127,13 +127,18 @@
         animationData=[[NSMutableArray alloc] init];
         counter=1;
         
-        //Bring hand in position
-        self.hand.center=CGPointMake([[restPosition[self.myGame.round] objectForKey:@"x"] floatValue],
-                                     [[restPosition[self.myGame.round] objectForKey:@"y"] floatValue]);
 
-        
+
+        NSString *path=[NSString stringWithFormat:@"hand_%d.png", !self.myGame.round];
+        UIImage *image = [UIImage imageNamed:path];
+        [self.hand setImage:image];
+        [self.hand setNeedsDisplay];
     } else {
         [self.playDroneMode setHidden:true];
+        NSString *path=[NSString stringWithFormat:@"hand_%d.png", !self.myGame.round];
+        UIImage *image = [UIImage imageNamed:path];
+        [self.hand setImage:image];
+        [self.hand setNeedsDisplay];
     }
     
     
@@ -156,10 +161,7 @@
         previousRound=self.myGame.round;
     }
 
-    NSString *path=[NSString stringWithFormat:@"hand_%d.png", self.myGame.round];
-    UIImage *image = [UIImage imageNamed:path];
-    [self.hand setImage:image];
-    [self.hand setNeedsDisplay];
+
 
     [self activateButtons];
     
@@ -428,6 +430,10 @@
     [self startGame];
     
     if (self.gameMode==2) {
+        //Bring hand in position
+        self.hand.center=CGPointMake([[restPosition[!self.myGame.round] objectForKey:@"x"] floatValue],
+                                   [[restPosition[!self.myGame.round] objectForKey:@"y"] floatValue]);
+        
         [self.playDroneMode setHidden:false];
         [self.playDroneMode setEnabled:true];
     }
@@ -730,7 +736,8 @@
 
 #pragma mark Navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{   alert=nil;
+{
+    alert=nil;
     [self.view.layer removeAllAnimations];
     [self exitGame];
     [audioPlayer stop];

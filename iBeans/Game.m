@@ -101,11 +101,11 @@
             [self.players[1] setName:player2];
         }
         if ([self.players[0] isKindOfClass:([Computer class])]) {
-            NSNumber *aiLevel1 = [self.defaults objectForKey:(@"aiLevel")];
+            NSNumber *aiLevel1 = [self.defaults objectForKey:(@"aiLevel1")];
             [self.players[0] setAiLevel:[aiLevel1 doubleValue]];
         }
         if ([self.players[1] isKindOfClass:([Computer class])]) {
-            NSNumber *aiLevel2 = [self.defaults objectForKey:(@"aiLevel")];
+            NSNumber *aiLevel2 = [self.defaults objectForKey:(@"aiLevel2")];
             [self.players[1] setAiLevel:[aiLevel2 doubleValue]];
         }
         
